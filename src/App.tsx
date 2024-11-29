@@ -132,7 +132,7 @@ function App() {
                               {"  "}
                               {item.isCarnivorous ? "🍖" : ""}
                            </span>
-                           <span>${item.price.toFixed(2)} </span>
+                           <span>${item.price.toFixed(0)} </span>
                         </li>
                      ))}
                   </ul>
@@ -174,21 +174,21 @@ function App() {
             </Card>
 
             <Button onClick={calculateSplit} className='w-full mb-4'>
-               Calculate Split
+               Calcular
             </Button>
 
             {splitResult && (
                <Card>
                   <CardHeader>
-                     <CardTitle>Split Result</CardTitle>
+                     <CardTitle>Resultado</CardTitle>
                   </CardHeader>
                   <CardContent>
                      <p>
-                        Vegan share: ${splitResult.vegan.toFixed(2)} per person
+                        Veganos <b>${splitResult.vegan.toFixed(0)}</b> por pera
                      </p>
                      <p>
-                        Non-vegan share: ${splitResult.nonVegan.toFixed(2)} per
-                        person
+                        Carnacas <b>${splitResult.nonVegan.toFixed(0)}</b> por
+                        pera
                      </p>
                   </CardContent>
                </Card>
