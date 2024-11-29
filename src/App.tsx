@@ -58,21 +58,21 @@ function App() {
 
    return (
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-         <ModeToggle />
          <div className='container mx-auto p-4'>
-            <h1 className='text-2xl font-bold mb-4'>
-               Vegan-Friendly Expense Splitter
-            </h1>
+            <div className='flex items-center justify-between mb-5'>
+               <h1 className='text-2xl font-bold'>Vegan Split</h1>
+               <ModeToggle />
+            </div>
 
             <Card className='mb-4'>
                <CardHeader>
-                  <CardTitle>Add New Item</CardTitle>
+                  <CardTitle>Añadir nuevo item</CardTitle>
                </CardHeader>
                <CardContent>
-                  <div className='grid gap-4'>
-                     <div className='grid grid-cols-2 gap-4'>
-                        <div>
-                           <Label htmlFor='item-name'>Item Name</Label>
+                  <div className='flex flex-col space-y-4'>
+                     <div className='flex flex-col space-y-4'>
+                        <div className='flex flex-col space-y-2'>
+                           <Label htmlFor='item-name'>Nombre</Label>
                            <Input
                               id='item-name'
                               value={newItem.name}
@@ -82,11 +82,11 @@ function App() {
                                     name: e.target.value,
                                  })
                               }
-                              placeholder='Enter item name'
+                              placeholder='Ej: Coca Cola'
                            />
                         </div>
-                        <div>
-                           <Label htmlFor='item-price'>Price</Label>
+                        <div className='flex flex-col space-y-2'>
+                           <Label htmlFor='item-price'>Precio</Label>
                            <Input
                               id='item-price'
                               type='number'
@@ -97,7 +97,7 @@ function App() {
                                     price: e.target.value,
                                  })
                               }
-                              placeholder='Enter price'
+                              placeholder='Ej: 3000'
                            />
                         </div>
                      </div>
@@ -105,20 +105,20 @@ function App() {
                         <Switch
                            id='carnivorous'
                            checked={newItem.isCarnivorous}
-                           onCheckedChange={(checked) =>
+                           onCheckedChange={(checked: boolean) =>
                               setNewItem({ ...newItem, isCarnivorous: checked })
                            }
                         />
-                        <Label htmlFor='carnivorous'>Carnivorous</Label>
+                        <Label htmlFor='carnivorous'>¿Es algo con carne?</Label>
                      </div>
-                     <Button onClick={addItem}>Add Item</Button>
+                     <Button onClick={addItem}>Añadir a la lista</Button>
                   </div>
                </CardContent>
             </Card>
 
             <Card className='mb-4'>
                <CardHeader>
-                  <CardTitle>Items List</CardTitle>
+                  <CardTitle>Lista de compras</CardTitle>
                </CardHeader>
                <CardContent>
                   <ul className='space-y-2'>
@@ -127,11 +127,12 @@ function App() {
                            key={item.id}
                            className='flex justify-between items-center'
                         >
-                           <span>{item.name}</span>
                            <span>
-                              ${item.price.toFixed(2)}{" "}
-                              {item.isCarnivorous ? "(Carnivorous)" : ""}
+                              {item.name}
+                              {"  "}
+                              {item.isCarnivorous ? "🍖" : ""}
                            </span>
+                           <span>${item.price.toFixed(2)} </span>
                         </li>
                      ))}
                   </ul>
@@ -140,30 +141,30 @@ function App() {
 
             <Card className='mb-4'>
                <CardHeader>
-                  <CardTitle>Group Information</CardTitle>
+                  <CardTitle>Información del grupo</CardTitle>
                </CardHeader>
                <CardContent>
-                  <div className='grid grid-cols-2 gap-4'>
-                     <div>
-                        <Label htmlFor='vegan-count'>Vegan Count</Label>
-                        <Input
-                           id='vegan-count'
-                           type='number'
-                           value={veganCount}
-                           onChange={(e) =>
-                              setVeganCount(parseInt(e.target.value) || 0)
-                           }
-                           min='0'
-                        />
-                     </div>
-                     <div>
-                        <Label htmlFor='non-vegan-count'>Non-Vegan Count</Label>
+                  <div className='flex flex-col space-y-4'>
+                     <div className='flex flex-col space-y-2'>
+                        <Label htmlFor='non-vegan-count'>Carnacas</Label>
                         <Input
                            id='non-vegan-count'
                            type='number'
                            value={nonVeganCount}
                            onChange={(e) =>
                               setNonVeganCount(parseInt(e.target.value) || 0)
+                           }
+                           min='0'
+                        />
+                     </div>
+                     <div className='flex flex-col space-y-2'>
+                        <Label htmlFor='vegan-count'>Veganos</Label>
+                        <Input
+                           id='vegan-count'
+                           type='number'
+                           value={veganCount}
+                           onChange={(e) =>
+                              setVeganCount(parseInt(e.target.value) || 0)
                            }
                            min='0'
                         />
