@@ -17,7 +17,7 @@ Follow these steps to set up the project and start building your application.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/react-vite-shadcn-starter.git
+git clone https://github.com/NicoPicotto/react-ts-shadcn.git
 cd react-vite-shadcn-starter
 ```
 
@@ -46,20 +46,6 @@ pnpm dev
 ```
 
 The application will be available at [http://localhost:5173](http://localhost:5173).
-
-## 📂 Project Structure
-
-The project follows a clean and intuitive folder structure:
-
-```plaintext
-src/
-├── components/     # Reusable components
-├── pages/          # Application pages
-├── styles/         # Global styles and Tailwind configuration
-├── hooks/          # Custom React hooks
-├── utils/          # Utility functions
-└── main.tsx        # Application entry point
-```
 
 ## 🛠️ Customization
 
