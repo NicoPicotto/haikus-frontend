@@ -150,10 +150,13 @@ function App() {
                         <Input
                            id='non-vegan-count'
                            type='number'
-                           value={nonVeganCount}
-                           onChange={(e) =>
-                              setNonVeganCount(parseInt(e.target.value) || 0)
-                           }
+                           value={nonVeganCount === 0 ? "" : nonVeganCount}
+                           onChange={(e) => {
+                              const value = e.target.value;
+                              setNonVeganCount(
+                                 value === "" ? 0 : parseInt(value)
+                              );
+                           }}
                            min='0'
                         />
                      </div>
@@ -162,10 +165,11 @@ function App() {
                         <Input
                            id='vegan-count'
                            type='number'
-                           value={veganCount}
-                           onChange={(e) =>
-                              setVeganCount(parseInt(e.target.value) || 0)
-                           }
+                           value={veganCount === 0 ? "" : veganCount}
+                           onChange={(e) => {
+                              const value = e.target.value;
+                              setVeganCount(value === "" ? 0 : parseInt(value));
+                           }}
                            min='0'
                         />
                      </div>
