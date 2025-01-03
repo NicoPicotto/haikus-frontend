@@ -1,25 +1,36 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "./components/Header";
-import Timeline from "./components/Timeline";
-import Sidebar from "./components/Sidebar";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Layout from "./layout";
+import TimelineView from "./views/timeline";
+import LoginView from "./views/auth/login";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
    return (
-      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-         <div className='min-h-screen bg-gray-100 dark:bg-gray-900'>
-            <Header />
-            <main className='container mx-auto px-4 py-8 flex gap-8'>
-               <div className='flex-grow'>
-                  <Timeline />
-               </div>
-               <div className='w-80 relative'>
-                  <div className='sticky top-4'>
-                     <Sidebar />
-                  </div>
-               </div>
-            </main>
-         </div>
-      </ThemeProvider>
+      <AuthProvider>
+         <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+            <Router>
+               <Routes>
+                  <Route
+                     path='/'
+                     element={
+                        <Layout>
+                           <TimelineView />
+                        </Layout>
+                     }
+                  />
+                  <Route
+                     path='/login'
+                     element={
+                        <Layout>
+                           <LoginView />
+                        </Layout>
+                     }
+                  />
+               </Routes>
+            </Router>
+         </ThemeProvider>
+      </AuthProvider>
    );
 }
 
