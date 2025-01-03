@@ -1,202 +1,23 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface Item {
-   id: number;
-   name: string;
-   price: number;
-   isCarnivorous: boolean;
-}
-import "./App.css";
-import { ModeToggle } from "./components/mode-toggle";
+import Header from "./components/Header";
+import Timeline from "./components/Timeline";
+import Sidebar from "./components/Sidebar";
 
 function App() {
-   const [items, setItems] = useState<Item[]>([]);
-   const [newItem, setNewItem] = useState({
-      name: "",
-      price: "",
-      isCarnivorous: false,
-   });
-   const [veganCount, setVeganCount] = useState(0);
-   const [nonVeganCount, setNonVeganCount] = useState(0);
-   const [splitResult, setSplitResult] = useState<{
-      vegan: number;
-      nonVegan: number;
-   } | null>(null);
-
-   const addItem = () => {
-      if (newItem.name && newItem.price) {
-         setItems([
-            ...items,
-            { ...newItem, id: Date.now(), price: parseFloat(newItem.price) },
-         ]);
-         setNewItem({ name: "", price: "", isCarnivorous: false });
-      }
-   };
-
-   const calculateSplit = () => {
-      const veganTotal = items
-         .filter((item) => !item.isCarnivorous)
-         .reduce((sum, item) => sum + item.price, 0);
-      const carnivorousTotal = items
-         .filter((item) => item.isCarnivorous)
-         .reduce((sum, item) => sum + item.price, 0);
-
-      const veganShare = veganTotal / (veganCount + nonVeganCount);
-      const nonVeganShare = veganShare + carnivorousTotal / nonVeganCount;
-
-      setSplitResult({
-         vegan: veganShare,
-         nonVegan: nonVeganShare,
-      });
-   };
-
    return (
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-         <div className='container mx-auto p-4'>
-            <div className='flex items-center justify-between mb-5'>
-               <h1 className='text-2xl font-bold'>Vegan Split</h1>
-               <ModeToggle />
-            </div>
-
-            <Card className='mb-4'>
-               <CardHeader>
-                  <CardTitle>Añadir nuevo item</CardTitle>
-               </CardHeader>
-               <CardContent>
-                  <div className='flex flex-col space-y-4'>
-                     <div className='flex flex-col space-y-4'>
-                        <div className='flex flex-col space-y-2'>
-                           <Label htmlFor='item-name'>Nombre</Label>
-                           <Input
-                              id='item-name'
-                              value={newItem.name}
-                              onChange={(e) =>
-                                 setNewItem({
-                                    ...newItem,
-                                    name: e.target.value,
-                                 })
-                              }
-                              placeholder='Ej: Coca Cola'
-                           />
-                        </div>
-                        <div className='flex flex-col space-y-2'>
-                           <Label htmlFor='item-price'>Precio</Label>
-                           <Input
-                              id='item-price'
-                              type='number'
-                              value={newItem.price}
-                              onChange={(e) =>
-                                 setNewItem({
-                                    ...newItem,
-                                    price: e.target.value,
-                                 })
-                              }
-                              placeholder='Ej: 3000'
-                           />
-                        </div>
-                     </div>
-                     <div className='flex items-center space-x-2'>
-                        <Switch
-                           id='carnivorous'
-                           checked={newItem.isCarnivorous}
-                           onCheckedChange={(checked: boolean) =>
-                              setNewItem({ ...newItem, isCarnivorous: checked })
-                           }
-                        />
-                        <Label htmlFor='carnivorous'>¿Es algo con carne?</Label>
-                     </div>
-                     <Button onClick={addItem}>Añadir a la lista</Button>
+         <div className='min-h-screen bg-gray-100 dark:bg-gray-900'>
+            <Header />
+            <main className='container mx-auto px-4 py-8 flex gap-8'>
+               <div className='flex-grow'>
+                  <Timeline />
+               </div>
+               <div className='w-80 relative'>
+                  <div className='sticky top-4'>
+                     <Sidebar />
                   </div>
-               </CardContent>
-            </Card>
-
-            <Card className='mb-4'>
-               <CardHeader>
-                  <CardTitle>Lista de compras</CardTitle>
-               </CardHeader>
-               <CardContent>
-                  <ul className='space-y-2'>
-                     {items.map((item) => (
-                        <li
-                           key={item.id}
-                           className='flex justify-between items-center'
-                        >
-                           <span>
-                              {item.name}
-                              {"  "}
-                              {item.isCarnivorous ? "🍖" : ""}
-                           </span>
-                           <span>${item.price.toFixed(0)} </span>
-                        </li>
-                     ))}
-                  </ul>
-               </CardContent>
-            </Card>
-
-            <Card className='mb-4'>
-               <CardHeader>
-                  <CardTitle>Información del grupo</CardTitle>
-               </CardHeader>
-               <CardContent>
-                  <div className='flex flex-col space-y-4'>
-                     <div className='flex flex-col space-y-2'>
-                        <Label htmlFor='non-vegan-count'>Carnacas</Label>
-                        <Input
-                           id='non-vegan-count'
-                           type='number'
-                           value={nonVeganCount === 0 ? "" : nonVeganCount}
-                           onChange={(e) => {
-                              const value = e.target.value;
-                              setNonVeganCount(
-                                 value === "" ? 0 : parseInt(value)
-                              );
-                           }}
-                           min='0'
-                        />
-                     </div>
-                     <div className='flex flex-col space-y-2'>
-                        <Label htmlFor='vegan-count'>Veganos</Label>
-                        <Input
-                           id='vegan-count'
-                           type='number'
-                           value={veganCount === 0 ? "" : veganCount}
-                           onChange={(e) => {
-                              const value = e.target.value;
-                              setVeganCount(value === "" ? 0 : parseInt(value));
-                           }}
-                           min='0'
-                        />
-                     </div>
-                  </div>
-               </CardContent>
-            </Card>
-
-            <Button onClick={calculateSplit} className='w-full mb-4'>
-               Calcular
-            </Button>
-
-            {splitResult && (
-               <Card>
-                  <CardHeader>
-                     <CardTitle>Resultado</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                     <p>
-                        Veganos <b>${splitResult.vegan.toFixed(0)}</b> por pera
-                     </p>
-                     <p>
-                        Carnacas <b>${splitResult.nonVegan.toFixed(0)}</b> por
-                        pera
-                     </p>
-                  </CardContent>
-               </Card>
-            )}
+               </div>
+            </main>
          </div>
       </ThemeProvider>
    );
