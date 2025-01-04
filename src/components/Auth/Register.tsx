@@ -10,50 +10,83 @@ import {
 } from "@/components/ui/card";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
-const Login = () => {
+const Register = () => {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
+   const [firstName, setFirstName] = useState("");
+   const [lastName, setLastName] = useState("");
    const [isLoading, setIsLoading] = useState(false);
    const [error, setError] = useState<string | null>(null);
+   const [showPassword, setShowPassword] = useState(false);
 
    const navigate = useNavigate();
-   const [showPassword, setShowPassword] = useState(false);
+   const { toast } = useToast();
 
    const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
    };
 
-   const { login } = useAuth();
+   const { register } = useAuth();
 
-   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
+   const handleSubmit = async () => {
       setIsLoading(true);
       setError(null);
       try {
-         await login(email, password);
-         setIsLoading(false);
+         await register(email, password, firstName, lastName);
          navigate("/");
+         toast({
+            title: `Bienvenid@ ${firstName}!`,
+            variant: "success",
+         });
       } catch (err) {
          if (err instanceof Error) {
             setError(err.message);
+            toast({
+               title: `Ocurrió un error al registrarte: ${err.message}`,
+               variant: "destructive",
+            });
          } else {
-            setError("An unknown error occurred.");
+            setError("Error desconocido durante el registro.");
          }
+      } finally {
          setIsLoading(false);
       }
    };
 
    return (
-      <div className='flex items-center justify-center flex-grow mt-40'>
+      <div className='flex items-center justify-center flex-grow mt-20'>
          <Card className='w-full max-w-lg bg-sidebar bg-background'>
             <CardHeader className='flex flex-col items-center space-y-1'>
                <h2 className='text-2xl font-bold text-center'>
-                  Ingresá a tu cuenta
+                  Creá tu cuenta
                </h2>
             </CardHeader>
             <CardContent className='space-y-4'>
+               <div className='space-y-2'>
+                  <Label htmlFor='firstName'>Nombre</Label>
+                  <Input
+                     id='firstName'
+                     type='text'
+                     placeholder='Matsuo'
+                     value={firstName}
+                     onChange={(e) => setFirstName(e.target.value)}
+                     required
+                  />
+               </div>
+               <div className='space-y-2'>
+                  <Label htmlFor='lastName'>Apellido</Label>
+                  <Input
+                     id='lastName'
+                     type='text'
+                     placeholder='Bashō'
+                     value={lastName}
+                     onChange={(e) => setLastName(e.target.value)}
+                     required
+                  />
+               </div>
                <div className='space-y-2'>
                   <Label htmlFor='email'>Email</Label>
                   <Input
@@ -97,12 +130,12 @@ const Login = () => {
             </CardContent>
             <CardFooter className='flex flex-col'>
                <Button onClick={handleSubmit} className='w-full'>
-                  {isLoading ? "Please wait..." : "Ingresar"}
+                  {isLoading ? "Please wait..." : "Registrarse"}
                </Button>
                {error && <p className='mt-2 text-sm text-red-600'>{error}</p>}
-               <Link to='/register'>
+               <Link to='/login'>
                   <Button variant='ghost' className='w-full mt-4'>
-                     ¿No tienes una cuenta? Regístrate
+                     ¿Ya tenés una cuenta? Ingresá
                   </Button>
                </Link>
             </CardFooter>
@@ -111,4 +144,4 @@ const Login = () => {
    );
 };
 
-export default Login;
+export default Register;

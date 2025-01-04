@@ -17,6 +17,12 @@ interface AuthContextType {
    userData: UserData | null;
    login: (email: string, password: string) => Promise<void>;
    logout: () => void;
+   register: (
+      email: string,
+      password: string,
+      firstName: string,
+      lastName: string
+   ) => Promise<void>;
 }
 
 // Crear el contexto con un valor inicial tipado
@@ -89,12 +95,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
    };
 
+   const register = async (
+      email: string,
+      password: string,
+      firstName: string,
+      lastName: string
+   ): Promise<void> => {
+      try {
+         const { token, user } = await authService.register(
+            email,
+            password,
+            firstName,
+            lastName
+         );
+
+         // Guarda el token y los datos del usuario en el estado
+         setUserData({
+            token,
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+         });
+
+         console.log("Registration successful:", { token, user });
+      } catch (error: unknown) {
+         if (error instanceof Error) {
+            console.error("Registration failed:", error.message);
+            throw error;
+         } else {
+            console.error("An unexpected error occurred during registration");
+            throw new Error("An unexpected error occurred");
+         }
+      }
+   };
+
    const logout = (): void => {
       setUserData(null);
    };
 
    return (
-      <AuthContext.Provider value={{ userData, login, logout }}>
+      <AuthContext.Provider value={{ userData, login, logout, register }}>
          {children}
       </AuthContext.Provider>
    );

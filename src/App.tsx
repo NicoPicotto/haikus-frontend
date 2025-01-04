@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { HaikusProvider } from "./context/HaikusContext";
 import MeView from "./views/user/meView";
 import UserView from "./views/user/userView";
+import RegisterView from "./views/auth/register";
 
 function App() {
    return (
@@ -28,6 +29,14 @@ function App() {
                         element={
                            <Layout>
                               <LoginView />
+                           </Layout>
+                        }
+                     />
+                     <Route
+                        path='register'
+                        element={
+                           <Layout>
+                              <RegisterView />
                            </Layout>
                         }
                      />

@@ -22,4 +22,31 @@ export const authService = {
          throw new Error("An unexpected error occurred");
       }
    },
+
+   register: async (
+      email: string,
+      password: string,
+      firstName: string,
+      lastName: string
+   ) => {
+      try {
+         const response = await axios.post(`${AUTH_SERVICE}/register`, {
+            email,
+            password,
+            firstName,
+            lastName,
+         });
+         return response.data;
+      } catch (error: unknown) {
+         if (axios.isAxiosError(error)) {
+            console.error(
+               "Error during register:",
+               error.response?.data?.message || error.message
+            );
+            throw new Error(error.response?.data?.message || "Register failed");
+         }
+         console.error("Unexpected error during register:", error);
+         throw new Error("An unexpected error occurred");
+      }
+   },
 };

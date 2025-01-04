@@ -73,7 +73,7 @@ export default function Header() {
                            </Link>
                         </TooltipTrigger>
                         <TooltipContent>
-                           <p>Login</p>
+                           <p>Ingresar</p>
                         </TooltipContent>
                      </Tooltip>
                   </TooltipProvider>
