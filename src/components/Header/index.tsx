@@ -1,13 +1,10 @@
-import { useState } from "react";
-import { Bell, User, PenTool, LogIn } from "lucide-react";
+import { Bell, User, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "../mode-toggle";
-import { ComposeDialog } from "../Haikus/CreateDialog";
+import CreateButton from "../Haikus/CreateBtn/CreateButton";
 
 export default function Header() {
-   const [isComposeDialogOpen, setIsComposeDialogOpen] = useState(false);
-
    return (
       <header className='bg-white dark:bg-gray-800 shadow-sm'>
          <div className='container mx-auto px-4 py-4 flex items-center justify-between'>
@@ -29,16 +26,9 @@ export default function Header() {
                   </Link>
                </Button>
                <ModeToggle />
-               <Button onClick={() => setIsComposeDialogOpen(true)}>
-                  <PenTool className='h-5 w-5 mr-2' />
-                  Componer
-               </Button>
+               <CreateButton />
             </nav>
          </div>
-         <ComposeDialog
-            isOpen={isComposeDialogOpen}
-            onClose={() => setIsComposeDialogOpen(false)}
-         />
       </header>
    );
 }

@@ -12,7 +12,20 @@ export const fetchHaikuById = async (id: number) => {
    return response.data;
 };
 
-export const createHaiku = async (haiku: string) => {
-   const response = await axios.post(`${HAIKUS_SERVICE}`, { haiku });
-   return response.data;
+export const createHaiku = async (text: string, token: string) => {
+   try {
+      const response = await axios.post(
+         `${HAIKUS_SERVICE}`,
+         { text },
+         {
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+         }
+      );
+      return response.data;
+   } catch (error) {
+      console.error("Error creating haiku:", error);
+      throw error;
+   }
 };
