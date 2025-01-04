@@ -27,7 +27,10 @@ export default function ProfileForm() {
          });
       } catch (err) {
          console.error("Error updating user:", err);
-         alert("Error al actualizar los datos. Intenta nuevamente.");
+         toast({
+            title: "Error al actualizar los datos.",
+            variant: "destructive",
+         });
       }
    };
 
