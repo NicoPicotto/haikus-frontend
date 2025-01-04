@@ -4,9 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { Link } from "react-router-dom";
+import { useHaikusContext } from "@/context/HaikusContext";
 
 export default function Sidebar() {
    const { users, loading, error, loadUsers } = useUser();
+   const { dailyHaiku } = useHaikusContext();
 
    useEffect(() => {
       loadUsers();
@@ -15,13 +17,39 @@ export default function Sidebar() {
    if (loading) return <p>Cargando...</p>;
    if (error) return <p>{error}</p>;
 
-   console.log(users);
-
    return (
-      <aside className='space-y-6'>
+      <aside className='space-y-4'>
          <div className='relative'>
-            <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400' />
-            <Input placeholder='Search Haikus' className=' pl-8' />
+            <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400 ' />
+            <Input
+               placeholder='Search Haikus'
+               className='pl-8 bg-white dark:bg-background'
+            />
+         </div>
+
+         <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
+            <h2 className='font-semibold mb-4'>Haiku del día</h2>
+            {dailyHaiku ? (
+               <div>
+                  <p className='whitespace-pre-line italic mb-2 font-serif'>
+                     {dailyHaiku.text}
+                  </p>
+                  <Link to={`/user/${dailyHaiku.author.id}`}>
+                     <Button
+                        variant='link'
+                        size='sm'
+                        className='text-gray-400 font-thin'
+                     >
+                        <p className='text-sm font-medium'>
+                           — {dailyHaiku.author.firstName}{" "}
+                           {dailyHaiku.author.lastName}
+                        </p>
+                     </Button>
+                  </Link>
+               </div>
+            ) : (
+               <p>Cargando...</p>
+            )}
          </div>
 
          <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>

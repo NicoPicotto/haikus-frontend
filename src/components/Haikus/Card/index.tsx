@@ -36,7 +36,11 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
             </p>
             <div className='flex items-center justify-between mt-4'>
                <Link to={`/user/${haiku.author.id}`}>
-                  <Button variant='link' size='sm' className='text-gray-400 '>
+                  <Button
+                     variant='link'
+                     size='sm'
+                     className='text-gray-400 font-thin'
+                  >
                      <PencilLine className='h-4 w-4 mr-1' />
 
                      <p className='text-sm font-medium'>
@@ -56,7 +60,7 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                      <MessageCircle className='h-4 w-4' />
                      {haiku.comments}
                   </Button> */}
-                  {isAuthor && ( // Mostrar solo si el usuario autenticado es el autor
+                  {isAuthor && (
                      <>
                         <UpdateBtn haiku={haiku} />
                         <DeleteBtn haikuId={haiku._id} />

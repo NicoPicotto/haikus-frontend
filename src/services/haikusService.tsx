@@ -66,3 +66,13 @@ export const updateHaiku = async (id: string, text: string, token: string) => {
       throw error;
    }
 };
+
+export const fetchDailyHaiku = async () => {
+   try {
+      const response = await axios.get(`${HAIKUS_SERVICE}/daily`);
+      return response.data;
+   } catch (error) {
+      console.error("Error fetching daily haiku:", error);
+      throw error;
+   }
+};

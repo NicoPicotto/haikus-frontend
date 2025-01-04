@@ -130,7 +130,7 @@ const Register = () => {
             </CardContent>
             <CardFooter className='flex flex-col'>
                <Button onClick={handleSubmit} className='w-full'>
-                  {isLoading ? "Please wait..." : "Registrarse"}
+                  {isLoading ? "Por favor espera..." : "Registrarse"}
                </Button>
                {error && <p className='mt-2 text-sm text-red-600'>{error}</p>}
                <Link to='/login'>

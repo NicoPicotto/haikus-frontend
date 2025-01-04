@@ -18,7 +18,7 @@ export default function Header() {
       <header className='bg-white dark:bg-gray-800 shadow-sm'>
          <div className='container mx-auto px-4 py-4 flex items-center justify-between'>
             <Link to='/'>
-               <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
+               <h1 className='text-3xl font-bold text-primary dark:text-white'>
                   HaikuHub
                </h1>
             </Link>

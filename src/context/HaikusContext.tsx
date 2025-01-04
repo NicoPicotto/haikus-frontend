@@ -7,6 +7,7 @@ import {
    updateHaiku,
    fetchHaikuByUser,
    deleteHaiku,
+   fetchDailyHaiku,
 } from "../services/haikusService";
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
@@ -14,6 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 interface HaikusContextType {
    haikus: Haiku[];
    userHaikus: Haiku[];
+   dailyHaiku: Haiku | null;
    loading: boolean;
    error: string | null;
    handleAddHaiku: (text: string) => Promise<void>;
@@ -21,6 +23,7 @@ interface HaikusContextType {
    handleDeleteHaiku: (id: string) => Promise<void>;
    loadHaikus: () => Promise<void>;
    loadHaikusByUser: (userId: string) => Promise<void>;
+   loadDailyHaiku: () => Promise<void>;
 }
 
 const HaikusContext = createContext<HaikusContextType | undefined>(undefined);
@@ -30,6 +33,7 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
    const [haikus, setHaikus] = useState<Haiku[]>([]);
    const [userHaikus, setUserHaikus] = useState<Haiku[]>([]);
+   const [dailyHaiku, setDailyHaiku] = useState<Haiku | null>(null);
    const [loading, setLoading] = useState<boolean>(false);
    const [error, setError] = useState<string | null>(null);
    const { token } = useAuth();
@@ -148,8 +152,25 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
       }
    };
 
+   const loadDailyHaiku = async () => {
+      setLoading(true);
+      try {
+         const haiku = await fetchDailyHaiku(); // Llama al servicio para obtener el Haiku del día
+         setDailyHaiku(haiku); // Guarda el Haiku en el estado
+      } catch (err) {
+         console.error("Error fetching the daily haiku:", err);
+         setError("Failed to load the daily haiku. Please try again.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
    useEffect(() => {
-      loadHaikus();
+      const fetchData = async () => {
+         await loadHaikus(); // Cargar todos los Haikus
+         await loadDailyHaiku(); // Cargar el Haiku del día
+      };
+      fetchData();
    }, []);
 
    return (
@@ -164,6 +185,8 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
             handleDeleteHaiku,
             handleUpdateHaiku,
             loadHaikusByUser,
+            loadDailyHaiku,
+            dailyHaiku,
          }}
       >
          {children}
