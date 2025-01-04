@@ -1,5 +1,4 @@
 import HaikuCard from "../Haikus/Card";
-
 import { Haiku } from "@/types/haiku";
 
 export default function Timeline({ haikus }: { haikus: Haiku[] }) {

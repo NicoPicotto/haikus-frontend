@@ -1,14 +1,23 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchHaikus, createHaiku } from "../services/haikusService";
+import {
+   fetchHaikus,
+   createHaiku,
+   updateHaiku,
+   fetchHaikuByUser,
+} from "../services/haikusService";
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
 
 interface HaikusContextType {
    haikus: Haiku[];
+   userHaikus: Haiku[];
    loading: boolean;
    error: string | null;
    handleAddHaiku: (text: string) => Promise<void>;
+   handleUpdateHaiku: (id: string, text: string) => Promise<void>;
    loadHaikus: () => Promise<void>;
+   loadHaikusByUser: (userId: string) => Promise<void>;
 }
 
 const HaikusContext = createContext<HaikusContextType | undefined>(undefined);
@@ -17,14 +26,17 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
    children,
 }) => {
    const [haikus, setHaikus] = useState<Haiku[]>([]);
+   const [userHaikus, setUserHaikus] = useState<Haiku[]>([]);
    const [loading, setLoading] = useState<boolean>(false);
    const [error, setError] = useState<string | null>(null);
    const { token } = useAuth();
 
    const loadHaikus = async () => {
+      console.log("Loading haikus...");
       setLoading(true);
       try {
          const data = await fetchHaikus();
+         console.log("Fetched haikus from backend:", data);
          setHaikus(data);
       } catch (err) {
          console.error("Error fetching haikus:", err);
@@ -52,13 +64,59 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
       }
    };
 
+   const handleUpdateHaiku = async (id: string, text: string) => {
+      if (!token) {
+         setError("User not authenticated");
+         return;
+      }
+
+      try {
+         setLoading(true);
+         const updatedHaiku = await updateHaiku(id, text, token);
+
+         // Actualiza el estado local
+         setHaikus((prevHaikus) =>
+            prevHaikus.map((haiku) =>
+               haiku._id === id ? { ...haiku, text: updatedHaiku.text } : haiku
+            )
+         );
+      } catch (err) {
+         console.error("Error updating haiku:", err);
+         setError("Failed to update haiku. Please try again.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const loadHaikusByUser = async (userId: string) => {
+      setLoading(true);
+      try {
+         const data = await fetchHaikuByUser(userId); // Llama al servicio para obtener haikus por usuario
+         setUserHaikus(data); // Actualiza el estado de userHaikus
+      } catch (err) {
+         console.error("Error fetching haikus by user:", err);
+         setError("Failed to load haikus for the user. Please try again.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
    useEffect(() => {
       loadHaikus();
    }, []);
 
    return (
       <HaikusContext.Provider
-         value={{ haikus, loading, error, handleAddHaiku, loadHaikus }}
+         value={{
+            haikus,
+            userHaikus,
+            loading,
+            error,
+            handleAddHaiku,
+            loadHaikus,
+            handleUpdateHaiku,
+            loadHaikusByUser,
+         }}
       >
          {children}
       </HaikusContext.Provider>

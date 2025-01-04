@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import Timeline from "@/components/Timeline";
-import { useHaikus } from "@/hooks/useHaikus";
 import { useAuth } from "@/context/AuthContext";
 import ProfileForm from "@/components/User/ProfileForm";
+import { useHaikusContext } from "@/context/HaikusContext";
 
 const MeView = () => {
-   const { userHaikus, loading, error, loadHaikusByUser } = useHaikus();
+   const { userHaikus, loading, error, loadHaikusByUser } = useHaikusContext();
 
    const { userId } = useAuth();
 

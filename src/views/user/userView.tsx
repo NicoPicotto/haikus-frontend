@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import Timeline from "@/components/Timeline";
-import { useHaikus } from "@/hooks/useHaikus";
+import { useHaikusContext } from "@/context/HaikusContext";
 import { useUser } from "@/hooks/useUser";
 import { useParams } from "react-router-dom";
 import UserProfileData from "@/components/User/UserProfileData";
@@ -12,7 +12,8 @@ const UserView = () => {
       loading: haikusLoading,
       error: haikusError,
       loadHaikusByUser,
-   } = useHaikus();
+   } = useHaikusContext();
+
    const {
       selectedUser,
       loadSelectedUser,
@@ -38,7 +39,6 @@ const UserView = () => {
          <div className='w-80 relative'>
             <div className='sticky top-4'>
                <UserProfileData user={selectedUser} />{" "}
-               {/* Pasamos la info del usuario seleccionado */}
             </div>
          </div>
          <div className='flex-grow'>

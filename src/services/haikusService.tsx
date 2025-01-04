@@ -34,3 +34,21 @@ export const createHaiku = async (text: string, token: string) => {
       throw error;
    }
 };
+
+export const updateHaiku = async (id: string, text: string, token: string) => {
+   try {
+      const response = await axios.put(
+         `${HAIKUS_SERVICE}/${id}`,
+         { text },
+         {
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+         }
+      );
+      return response.data.updatedHaiku;
+   } catch (error) {
+      console.error("Error updating haiku:", error);
+      throw error;
+   }
+};

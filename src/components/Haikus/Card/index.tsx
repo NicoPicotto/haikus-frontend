@@ -9,17 +9,23 @@ import {
    TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Haiku } from "@/types/haiku";
+import { useAuth } from "@/context/AuthContext";
+import UpdateBtn from "../UpdateBtn";
 
 interface HaikuCardProps {
    haiku: Haiku;
 }
 
 export default function HaikuCard({ haiku }: HaikuCardProps) {
+   const { userData } = useAuth();
+
    const formattedDate = new Intl.DateTimeFormat("es-ES", {
       year: "numeric",
       month: "long",
       day: "numeric",
    }).format(new Date(haiku.date));
+
+   const isAuthor = userData?.id === haiku.author.id;
 
    return (
       <Card className='overflow-hidden dark:bg-gray-800'>
@@ -49,6 +55,9 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                      <MessageCircle className='h-4 w-4' />
                      {haiku.comments}
                   </Button> */}
+                  {isAuthor && ( // Mostrar solo si el usuario autenticado es el autor
+                     <UpdateBtn haiku={haiku} />
+                  )}
                   <TooltipProvider>
                      <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>

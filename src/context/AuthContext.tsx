@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 import { authService } from "@/services/authService";
 
 // Interfaz para los datos de usuario
@@ -24,9 +25,23 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
    children,
 }) => {
+   const validateToken = (token: string): boolean => {
+      try {
+         const { exp } = JSON.parse(atob(token.split(".")[1])); // Decodifica el payload del JWT
+         return Date.now() < exp * 1000; // Compara la fecha actual con la expiración
+      } catch {
+         return false; // Si el token no es válido, retorna falso
+      }
+   };
+
    const [userData, setUserData] = useState<UserData | null>(() => {
       const storedUserData = localStorage.getItem("userData");
-      return storedUserData ? JSON.parse(storedUserData) : null;
+      if (storedUserData) {
+         const parsedData = JSON.parse(storedUserData);
+         const isTokenValid = validateToken(parsedData.token); // Valida la expiración
+         return isTokenValid ? parsedData : null;
+      }
+      return null;
    });
 
    useEffect(() => {
@@ -35,6 +50,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       } else {
          localStorage.removeItem("userData");
       }
+   }, [userData]);
+
+   //para validar el token
+   useEffect(() => {
+      const interceptor = axios.interceptors.response.use(
+         (response) => response,
+         (error) => {
+            if (error.response?.status === 401) {
+               console.error("Token inválido o expirado, cerrando sesión.");
+               logout(); // Cierra sesión automáticamente
+            }
+            return Promise.reject(error);
+         }
+      );
+      return () => axios.interceptors.response.eject(interceptor);
    }, [userData]);
 
    const login = async (email: string, password: string): Promise<void> => {

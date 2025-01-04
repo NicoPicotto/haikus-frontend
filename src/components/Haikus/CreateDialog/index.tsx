@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
    Dialog,
@@ -13,14 +13,23 @@ interface ComposeDialogProps {
    isOpen: boolean;
    onClose: () => void;
    onSubmit: (haiku: string) => Promise<void>;
+   defaultValue?: string;
+   isEditing?: boolean;
 }
 
 export function ComposeDialog({
    isOpen,
    onClose,
    onSubmit,
+   defaultValue = "",
+   isEditing = false,
 }: ComposeDialogProps) {
-   const [haikuText, setHaikuText] = useState("");
+   const [haikuText, setHaikuText] = useState(defaultValue);
+
+   //para la edicion
+   useEffect(() => {
+      if (defaultValue) setHaikuText(defaultValue); // Actualiza el estado si defaultValue cambia
+   }, [defaultValue]);
 
    const handleTextareaChange = (
       event: React.ChangeEvent<HTMLTextAreaElement>
@@ -38,9 +47,9 @@ export function ComposeDialog({
       }
 
       try {
-         await onSubmit(haikuText); // Llamamos a la función pasada desde el hook
-         setHaikuText(""); // Limpiar el textarea
-         onClose(); // Cerrar el diálogo
+         await onSubmit(haikuText); // Llama a la función pasada desde el botón
+         setHaikuText(""); // Limpia el textarea
+         onClose(); // Cierra el diálogo
       } catch (err) {
          console.error("Error submitting haiku:", err);
          alert("Failed to submit haiku. Please try again.");
@@ -51,7 +60,9 @@ export function ComposeDialog({
       <Dialog open={isOpen} onOpenChange={onClose}>
          <DialogContent className='sm:max-w-[425px]'>
             <DialogHeader>
-               <DialogTitle>Componer Haiku</DialogTitle>
+               <DialogTitle>
+                  {isEditing ? "Editar Haiku" : "Crear Haiku"}
+               </DialogTitle>
             </DialogHeader>
             <Textarea
                value={haikuText}
@@ -63,7 +74,9 @@ export function ComposeDialog({
                <Button variant='outline' onClick={onClose}>
                   Cancel
                </Button>
-               <Button onClick={handleSubmit}>Crear Haiku</Button>
+               <Button onClick={handleSubmit}>
+                  {isEditing ? "Guardar cambios" : "Crear Haiku"}
+               </Button>
             </DialogFooter>
          </DialogContent>
       </Dialog>
