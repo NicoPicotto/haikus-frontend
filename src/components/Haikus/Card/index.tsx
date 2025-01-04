@@ -21,7 +21,7 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                {haiku.text}
             </p>
             <div className='flex items-center justify-between mt-4'>
-               <div className='flex items-center space-x-2 px-4 py-2 border border-primary rounded-full'>
+               <div className='flex items-center space-x-2 text-gray-400'>
                   <PencilLine className='h-4 w-4 mr-1' />
 
                   <p className='text-sm font-medium'>
