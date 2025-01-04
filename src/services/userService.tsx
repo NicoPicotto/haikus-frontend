@@ -8,6 +8,11 @@ export const fetchUserById = async (id: string) => {
    return response.data;
 };
 
+export const fetchUsers = async () => {
+   const response = await axios.get(`${USER_SERVICE}`);
+   return response.data;
+};
+
 export const updateUser = async (
    id: string,
    data: UpdateUserPayload,

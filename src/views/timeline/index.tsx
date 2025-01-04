@@ -8,8 +8,6 @@ const TimelineView = () => {
    if (loading) return <p>Cargando...</p>;
    if (error) return <p>{error}</p>;
 
-   console.log("Haikus en el timeline:", haikus);
-
    return (
       <>
          <div className='flex-grow'>

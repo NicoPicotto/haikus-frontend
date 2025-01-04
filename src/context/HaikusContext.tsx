@@ -6,6 +6,7 @@ import {
    createHaiku,
    updateHaiku,
    fetchHaikuByUser,
+   deleteHaiku,
 } from "../services/haikusService";
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
@@ -17,6 +18,7 @@ interface HaikusContextType {
    error: string | null;
    handleAddHaiku: (text: string) => Promise<void>;
    handleUpdateHaiku: (id: string, text: string) => Promise<void>;
+   handleDeleteHaiku: (id: string) => Promise<void>;
    loadHaikus: () => Promise<void>;
    loadHaikusByUser: (userId: string) => Promise<void>;
 }
@@ -34,11 +36,10 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
    const { toast } = useToast();
 
    const loadHaikus = async () => {
-      console.log("Loading haikus...");
       setLoading(true);
       try {
          const data = await fetchHaikus();
-         console.log("Fetched haikus from backend:", data);
+
          setHaikus(data);
       } catch (err) {
          console.error("Error fetching haikus:", err);
@@ -119,6 +120,34 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
       }
    };
 
+   const handleDeleteHaiku = async (id: string) => {
+      if (!token) {
+         setError("User not authenticated");
+         return;
+      }
+
+      try {
+         setLoading(true);
+         await deleteHaiku(id, token); // Llama al servicio para borrar el haiku
+         setHaikus(
+            (prevHaikus) => prevHaikus.filter((haiku) => haiku._id !== id) // Actualiza el estado local
+         );
+         toast({
+            title: "Haiku eliminado con éxito.",
+            variant: "success",
+         });
+      } catch (err) {
+         console.error("Error deleting haiku:", err);
+         setError("Failed to delete haiku. Please try again.");
+         toast({
+            title: "Error al eliminar haiku.",
+            variant: "destructive",
+         });
+      } finally {
+         setLoading(false);
+      }
+   };
+
    useEffect(() => {
       loadHaikus();
    }, []);
@@ -132,6 +161,7 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
             error,
             handleAddHaiku,
             loadHaikus,
+            handleDeleteHaiku,
             handleUpdateHaiku,
             loadHaikusByUser,
          }}

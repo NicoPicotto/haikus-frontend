@@ -17,6 +17,20 @@ export const fetchHaikuByUser = async (id: string) => {
    return response.data;
 };
 
+export const deleteHaiku = async (id: string, token: string) => {
+   try {
+      const response = await axios.delete(`${HAIKUS_SERVICE}/${id}`, {
+         headers: {
+            Authorization: `Bearer ${token}`,
+         },
+      });
+      return response.data;
+   } catch (error) {
+      console.error("Error deleting haiku:", error);
+      throw error;
+   }
+};
+
 export const createHaiku = async (text: string, token: string) => {
    try {
       const response = await axios.post(

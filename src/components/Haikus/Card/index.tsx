@@ -11,6 +11,7 @@ import {
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
 import UpdateBtn from "../UpdateBtn";
+import DeleteBtn from "../DeleteBtn";
 
 interface HaikuCardProps {
    haiku: Haiku;
@@ -56,8 +57,12 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                      {haiku.comments}
                   </Button> */}
                   {isAuthor && ( // Mostrar solo si el usuario autenticado es el autor
-                     <UpdateBtn haiku={haiku} />
+                     <>
+                        <UpdateBtn haiku={haiku} />
+                        <DeleteBtn haikuId={haiku._id} />
+                     </>
                   )}
+
                   <TooltipProvider>
                      <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>

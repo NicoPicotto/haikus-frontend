@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchUserById, updateUser } from "../services/userService";
+import { fetchUserById, updateUser, fetchUsers } from "../services/userService";
 import { User, UpdateUserPayload } from "@/types/user";
 import { useAuth } from "@/context/AuthContext";
 
 export const useUser = () => {
    const [user, setUser] = useState<User | null>(null);
+   const [users, setUsers] = useState<User[] | null>(null);
    const [selectedUser, setSelectedUser] = useState<User | null>(null);
    const [loading, setLoading] = useState<boolean>(true);
    const [error, setError] = useState<string | null>(null);
@@ -25,6 +26,19 @@ export const useUser = () => {
       } catch (err) {
          console.error("Error fetching user:", err);
          setError("Failed to load user. Please try again.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const loadUsers = async () => {
+      setLoading(true);
+      try {
+         const data = await fetchUsers(); // Llama al servicio para obtener todos los usuarios
+         setUsers(data);
+      } catch (err) {
+         console.error("Error fetching users:", err);
+         setError("Failed to load users. Please try again.");
       } finally {
          setLoading(false);
       }
@@ -72,5 +86,8 @@ export const useUser = () => {
       loadSelectedUser,
       handleUpdateUser,
       selectedUser,
+      users,
+      loadUsers,
+      loadUser,
    };
 };
