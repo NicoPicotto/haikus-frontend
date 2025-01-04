@@ -15,8 +15,7 @@ export const useUser = () => {
 
    const loadUser = async () => {
       if (!userId) {
-         setError("User ID is required");
-         setLoading(false);
+         setError(null); // No queremos bloquear todo si no hay usuario
          return;
       }
       setLoading(true);
@@ -34,8 +33,9 @@ export const useUser = () => {
    const loadUsers = async () => {
       setLoading(true);
       try {
-         const data = await fetchUsers(); // Llama al servicio para obtener todos los usuarios
+         const data = await fetchUsers();
          setUsers(data);
+         setError(null); // Asegúrate de limpiar cualquier error anterior
       } catch (err) {
          console.error("Error fetching users:", err);
          setError("Failed to load users. Please try again.");
@@ -43,7 +43,6 @@ export const useUser = () => {
          setLoading(false);
       }
    };
-
    const loadSelectedUser = async (id: string) => {
       setLoading(true);
       try {
@@ -76,8 +75,10 @@ export const useUser = () => {
    };
 
    useEffect(() => {
-      loadUser();
-   }, []);
+      if (userId) {
+         loadUser();
+      }
+   }, [userId]);
 
    return {
       user,
