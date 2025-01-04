@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
    fetchHaikus,
    createHaiku,
@@ -30,6 +31,7 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
    const [loading, setLoading] = useState<boolean>(false);
    const [error, setError] = useState<string | null>(null);
    const { token } = useAuth();
+   const { toast } = useToast();
 
    const loadHaikus = async () => {
       console.log("Loading haikus...");
@@ -56,9 +58,17 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
          setLoading(true);
          const newHaiku = await createHaiku(text, token);
          setHaikus((prevHaikus) => [...prevHaikus, newHaiku]);
+         toast({
+            title: "Haiku creado con éxito.",
+            variant: "success",
+         });
       } catch (err) {
          console.error("Error creating haiku:", err);
          setError("Failed to create haiku. Please try again.");
+         toast({
+            title: "Error al crear haiku.",
+            variant: "destructive",
+         });
       } finally {
          setLoading(false);
       }
@@ -80,9 +90,17 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
                haiku._id === id ? { ...haiku, text: updatedHaiku.text } : haiku
             )
          );
+         toast({
+            title: "Haiku actualizado con éxito.",
+            variant: "success",
+         });
       } catch (err) {
          console.error("Error updating haiku:", err);
          setError("Failed to update haiku. Please try again.");
+         toast({
+            title: "Error al actualizar haiku.",
+            variant: "destructive",
+         });
       } finally {
          setLoading(false);
       }

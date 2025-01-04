@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchUserById } from "../services/userService";
-import { User } from "@/types/user";
+import { fetchUserById, updateUser } from "../services/userService";
+import { User, UpdateUserPayload } from "@/types/user";
 import { useAuth } from "@/context/AuthContext";
 
 export const useUser = () => {
@@ -9,7 +10,7 @@ export const useUser = () => {
    const [loading, setLoading] = useState<boolean>(true);
    const [error, setError] = useState<string | null>(null);
 
-   const { userId } = useAuth();
+   const { token, userId } = useAuth();
 
    const loadUser = async () => {
       if (!userId) {
@@ -42,6 +43,24 @@ export const useUser = () => {
       }
    };
 
+   const handleUpdateUser = async (data: UpdateUserPayload) => {
+      if (!userId || !token) {
+         setError("User not authenticated");
+         return;
+      }
+
+      setLoading(true);
+      try {
+         const updatedUser = await updateUser(userId, data, token); //
+         setUser(updatedUser);
+      } catch (err) {
+         console.error("Error updating user:", err);
+         setError("Failed to update user data.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
    useEffect(() => {
       loadUser();
    }, []);
@@ -51,6 +70,7 @@ export const useUser = () => {
       loading,
       error,
       loadSelectedUser,
+      handleUpdateUser,
       selectedUser,
    };
 };

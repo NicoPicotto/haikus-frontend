@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
    return (
@@ -7,6 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
          <main className='container mx-auto px-4 py-8 flex gap-8'>
             {children}
          </main>
+         <Toaster />
       </div>
    );
 }
