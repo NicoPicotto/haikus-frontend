@@ -13,16 +13,12 @@ interface ComposeDialogProps {
    isOpen: boolean;
    onClose: () => void;
    onSubmit: (haiku: string) => Promise<void>;
-   loading: boolean;
-   error: string | null;
 }
 
 export function ComposeDialog({
    isOpen,
    onClose,
    onSubmit,
-   loading,
-   error,
 }: ComposeDialogProps) {
    const [haikuText, setHaikuText] = useState("");
 
@@ -55,22 +51,19 @@ export function ComposeDialog({
       <Dialog open={isOpen} onOpenChange={onClose}>
          <DialogContent className='sm:max-w-[425px]'>
             <DialogHeader>
-               <DialogTitle>Compose Haiku</DialogTitle>
+               <DialogTitle>Componer Haiku</DialogTitle>
             </DialogHeader>
             <Textarea
                value={haikuText}
                onChange={handleTextareaChange}
-               placeholder='Write your haiku here...'
+               placeholder='Escribí tu haiku aquí...'
                className='min-h-[100px]'
             />
             <DialogFooter>
                <Button variant='outline' onClick={onClose}>
                   Cancel
                </Button>
-               <Button onClick={handleSubmit}>
-                  {loading ? "Por favor espere..." : "Crear Haiku"}
-               </Button>
-               {error && <p className='mt-2 text-sm text-red-600'>{error}</p>}
+               <Button onClick={handleSubmit}>Crear Haiku</Button>
             </DialogFooter>
          </DialogContent>
       </Dialog>

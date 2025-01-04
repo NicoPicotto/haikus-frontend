@@ -17,14 +17,16 @@ export default function Header() {
                <Button variant='ghost' size='icon'>
                   <Bell className='h-5 w-5' />
                </Button>
-               <Button variant='ghost' size='icon'>
-                  <User className='h-5 w-5' />
-               </Button>
-               <Button variant='ghost' size='icon'>
-                  <Link to='/login'>
+               <Link to='/me'>
+                  <Button variant='ghost' size='icon'>
+                     <User className='h-5 w-5' />
+                  </Button>
+               </Link>
+               <Link to='/login'>
+                  <Button variant='ghost' size='icon'>
                      <LogIn className='h-5 w-5' />
-                  </Link>
-               </Button>
+                  </Button>
+               </Link>
                <ModeToggle />
                <CreateButton />
             </nav>

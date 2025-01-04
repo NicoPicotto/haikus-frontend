@@ -1,9 +1,9 @@
 import Timeline from "@/components/Timeline";
 import Sidebar from "@/components/Sidebar";
-import { useHaikus } from "@/hooks/useHaikus";
+import { useHaikusContext } from "@/context/HaikusContext";
 
 const TimelineView = () => {
-   const { haikus, loading, error } = useHaikus();
+   const { haikus, loading, error } = useHaikusContext();
 
    if (loading) return <p>Cargando...</p>;
    if (error) return <p>{error}</p>;

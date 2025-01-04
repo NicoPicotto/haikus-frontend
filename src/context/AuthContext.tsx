@@ -5,6 +5,10 @@ import { authService } from "@/services/authService";
 // Interfaz para los datos de usuario
 interface UserData {
    token: string;
+   id: string;
+   email: string;
+   firstName: string;
+   lastName: string;
 }
 
 // Interfaz para el contexto de autenticación
@@ -35,9 +39,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
    const login = async (email: string, password: string): Promise<void> => {
       try {
-         const { token } = await authService.login(email, password);
-         setUserData({ token });
-         console.log("Login successful:", { token });
+         const { token, user } = await authService.login(email, password);
+         setUserData({
+            token,
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+         });
+         console.log("Login successful:", { token, user });
       } catch (error: unknown) {
          if (error instanceof Error) {
             console.error("Login failed:", error.message);
@@ -60,11 +70,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
    );
 };
 
-export const useAuth = (): AuthContextType & { token: string | null } => {
+export const useAuth = (): AuthContextType & {
+   token: string | null;
+   userId: string | null;
+} => {
    const context = useContext(AuthContext);
    if (!context) {
       throw new Error("useAuth must be used within an AuthProvider");
    }
    const token = context.userData?.token || null;
-   return { ...context, token };
+   const userId = context.userData?.id || null;
+   return { ...context, token, userId };
 };

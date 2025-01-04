@@ -2,16 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PenTool } from "lucide-react";
 import { ComposeDialog } from "../CreateDialog";
-import { useHaikus } from "@/hooks/useHaikus";
+import { useHaikusContext } from "@/context/HaikusContext";
 
 export default function CreateButton() {
    const [isComposeDialogOpen, setIsComposeDialogOpen] = useState(false);
 
-   const { loading, error, handleAddHaiku } = useHaikus();
-
-   if (loading) return <p>Loading...</p>;
-   if (error) return <p>{error}</p>;
-
+   const { handleAddHaiku } = useHaikusContext();
    return (
       <>
          <Button onClick={() => setIsComposeDialogOpen(true)}>
@@ -22,8 +18,6 @@ export default function CreateButton() {
             isOpen={isComposeDialogOpen}
             onClose={() => setIsComposeDialogOpen(false)}
             onSubmit={handleAddHaiku}
-            loading={loading}
-            error={error}
          />
       </>
    );

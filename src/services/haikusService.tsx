@@ -12,6 +12,11 @@ export const fetchHaikuById = async (id: number) => {
    return response.data;
 };
 
+export const fetchHaikuByUser = async (id: string) => {
+   const response = await axios.get(`${HAIKUS_SERVICE}/user/${id}`);
+   return response.data;
+};
+
 export const createHaiku = async (text: string, token: string) => {
    try {
       const response = await axios.post(

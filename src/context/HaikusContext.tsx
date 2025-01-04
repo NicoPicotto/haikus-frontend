@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
-import {
-   fetchHaikus,
-   createHaiku,
-   fetchHaikuByUser,
-} from "../services/haikusService";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { fetchHaikus, createHaiku } from "../services/haikusService";
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
 
-export const useHaikus = () => {
-   const [haikus, setHaikus] = useState<Haiku[]>([]);
-   const [loading, setLoading] = useState<boolean>(true);
-   const [error, setError] = useState<string | null>(null);
+interface HaikusContextType {
+   haikus: Haiku[];
+   loading: boolean;
+   error: string | null;
+   handleAddHaiku: (text: string) => Promise<void>;
+   loadHaikus: () => Promise<void>;
+}
 
+const HaikusContext = createContext<HaikusContextType | undefined>(undefined);
+
+export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
+   children,
+}) => {
+   const [haikus, setHaikus] = useState<Haiku[]>([]);
+   const [loading, setLoading] = useState<boolean>(false);
+   const [error, setError] = useState<string | null>(null);
    const { token } = useAuth();
-   // Fetch all haikus
+
    const loadHaikus = async () => {
       setLoading(true);
       try {
@@ -27,11 +34,6 @@ export const useHaikus = () => {
       }
    };
 
-   useEffect(() => {
-      loadHaikus();
-   }, []);
-
-   // Create a new haiku
    const handleAddHaiku = async (text: string) => {
       if (!token) {
          setError("User not authenticated");
@@ -50,25 +52,23 @@ export const useHaikus = () => {
       }
    };
 
-   const loadHaikusByUser = async (userId: string) => {
-      setLoading(true);
-      try {
-         const data = await fetchHaikuByUser(userId);
-         setHaikus(data);
-      } catch (err) {
-         console.error("Error fetching haikus by user:", err);
-         setError("Failed to load haikus for the user. Please try again.");
-      } finally {
-         setLoading(false);
-      }
-   };
+   useEffect(() => {
+      loadHaikus();
+   }, []);
 
-   return {
-      haikus,
-      loading,
-      error,
-      handleAddHaiku,
-      loadHaikus,
-      loadHaikusByUser,
-   };
+   return (
+      <HaikusContext.Provider
+         value={{ haikus, loading, error, handleAddHaiku, loadHaikus }}
+      >
+         {children}
+      </HaikusContext.Provider>
+   );
+};
+
+export const useHaikusContext = () => {
+   const context = useContext(HaikusContext);
+   if (context === undefined) {
+      throw new Error("useHaikusContext must be used within a HaikusProvider");
+   }
+   return context;
 };
