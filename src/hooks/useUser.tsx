@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export const useUser = () => {
    const [user, setUser] = useState<User | null>(null);
+   const [selectedUser, setSelectedUser] = useState<User | null>(null);
    const [loading, setLoading] = useState<boolean>(true);
    const [error, setError] = useState<string | null>(null);
 
@@ -28,6 +29,19 @@ export const useUser = () => {
       }
    };
 
+   const loadSelectedUser = async (id: string) => {
+      setLoading(true);
+      try {
+         const data = await fetchUserById(id);
+         setSelectedUser(data);
+      } catch (err) {
+         console.error("Error fetching selected user:", err);
+         setError("Failed to load selected user. Please try again.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
    useEffect(() => {
       loadUser();
    }, []);
@@ -36,5 +50,7 @@ export const useUser = () => {
       user,
       loading,
       error,
+      loadSelectedUser,
+      selectedUser,
    };
 };

@@ -1,6 +1,7 @@
 import { Share2, PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 import {
    Tooltip,
    TooltipContent,
@@ -27,13 +28,15 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                {haiku.text}
             </p>
             <div className='flex items-center justify-between mt-4'>
-               <div className='flex items-center space-x-2 text-gray-400'>
-                  <PencilLine className='h-4 w-4 mr-1' />
+               <Link to={`/user/${haiku.author.id}`}>
+                  <Button variant='link' size='sm' className='text-gray-400 '>
+                     <PencilLine className='h-4 w-4 mr-1' />
 
-                  <p className='text-sm font-medium'>
-                     {haiku.author.firstName} {haiku.author.lastName}
-                  </p>
-               </div>
+                     <p className='text-sm font-medium'>
+                        {haiku.author.firstName} {haiku.author.lastName}
+                     </p>
+                  </Button>
+               </Link>
                <div className='flex space-x-1'>
                   <p className='text-gray-400 text-sm pt-1.5 mr-1'>
                      {formattedDate}

@@ -8,7 +8,6 @@ export default function ProfileForm() {
    if (loading) return <p>Cargando información...</p>;
    if (error) return <p>Error al cargar los datos: {error}</p>;
 
-   console.log("User", user);
 
    return (
       <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>

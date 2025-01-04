@@ -18,7 +18,7 @@ export default function Sidebar() {
                      <span>Kobayashi Issa</span>
                   </div>
                   <Button variant='outline' size='sm'>
-                     Follow
+                     Seguir
                   </Button>
                </li>
                <li className='flex items-center justify-between'>
@@ -26,7 +26,7 @@ export default function Sidebar() {
                      <span>Masaoka Shiki</span>
                   </div>
                   <Button variant='outline' size='sm'>
-                     Follow
+                     Seguir
                   </Button>
                </li>
                <li className='flex items-center justify-between'>
@@ -34,7 +34,7 @@ export default function Sidebar() {
                      <span>Masaoka Shiki</span>
                   </div>
                   <Button variant='outline' size='sm'>
-                     Follow
+                     Seguir
                   </Button>
                </li>
                <li className='flex items-center justify-between'>
@@ -42,7 +42,7 @@ export default function Sidebar() {
                      <span>Masaoka Shiki</span>
                   </div>
                   <Button variant='outline' size='sm'>
-                     Follow
+                     Seguir
                   </Button>
                </li>
             </ul>

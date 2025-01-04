@@ -6,6 +6,7 @@ import LoginView from "./views/auth/login";
 import { AuthProvider } from "./context/AuthContext";
 import { HaikusProvider } from "./context/HaikusContext";
 import MeView from "./views/user/meView";
+import UserView from "./views/user/userView";
 
 function App() {
    return (
@@ -35,6 +36,14 @@ function App() {
                         element={
                            <Layout>
                               <MeView />
+                           </Layout>
+                        }
+                     />
+                     <Route
+                        path='/user/:id'
+                        element={
+                           <Layout>
+                              <UserView />
                            </Layout>
                         }
                      />
