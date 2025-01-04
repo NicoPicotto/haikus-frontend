@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export const useHaikus = () => {
    const [haikus, setHaikus] = useState<Haiku[]>([]);
+   const [userHaikus, setUserHaikus] = useState<Haiku[]>([]);
    const [loading, setLoading] = useState<boolean>(true);
    const [error, setError] = useState<string | null>(null);
 
@@ -50,11 +51,12 @@ export const useHaikus = () => {
       }
    };
 
+   // Fetch haikus by user
    const loadHaikusByUser = async (userId: string) => {
       setLoading(true);
       try {
          const data = await fetchHaikuByUser(userId);
-         setHaikus(data);
+         setUserHaikus(data); // Guardamos en userHaikus
       } catch (err) {
          console.error("Error fetching haikus by user:", err);
          setError("Failed to load haikus for the user. Please try again.");
@@ -70,5 +72,6 @@ export const useHaikus = () => {
       handleAddHaiku,
       loadHaikus,
       loadHaikusByUser,
+      userHaikus,
    };
 };

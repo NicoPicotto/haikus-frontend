@@ -1,6 +1,12 @@
-import { Heart, MessageCircle, Share2, PencilLine } from "lucide-react";
+import { Share2, PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+   Tooltip,
+   TooltipContent,
+   TooltipProvider,
+   TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Haiku } from "@/types/haiku";
 
 interface HaikuCardProps {
@@ -32,17 +38,26 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                   <p className='text-gray-400 text-sm pt-1.5 mr-1'>
                      {formattedDate}
                   </p>
-                  <Button variant='ghost' size='sm'>
+                  {/* <Button variant='ghost' size='sm'>
                      <Heart className='h-4 w-4' />
                      {haiku.likes}
                   </Button>
                   <Button variant='ghost' size='sm'>
                      <MessageCircle className='h-4 w-4' />
                      {haiku.comments}
-                  </Button>
-                  <Button variant='ghost' size='sm'>
-                     <Share2 className='h-4 w-4' />
-                  </Button>
+                  </Button> */}
+                  <TooltipProvider>
+                     <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                           <Button variant='ghost' size='sm'>
+                              <Share2 className='h-4 w-4' />
+                           </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                           <p>Compartir</p>
+                        </TooltipContent>
+                     </Tooltip>
+                  </TooltipProvider>
                </div>
             </div>
          </CardContent>

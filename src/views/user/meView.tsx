@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import ProfileForm from "@/components/User/ProfileForm";
 
 const MeView = () => {
-   const { haikus, loading, error, loadHaikusByUser } = useHaikus();
+   const { userHaikus, loading, error, loadHaikusByUser } = useHaikus();
 
    const { userId } = useAuth();
 
@@ -26,7 +26,7 @@ const MeView = () => {
             </div>
          </div>
          <div className='flex-grow'>
-            <Timeline haikus={haikus} />
+            <Timeline haikus={userHaikus} />
          </div>
       </>
    );
