@@ -1,17 +1,13 @@
-import { Share2, PencilLine } from "lucide-react";
+import { PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import {
-   Tooltip,
-   TooltipContent,
-   TooltipProvider,
-   TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
 import UpdateBtn from "../UpdateBtn";
 import DeleteBtn from "../DeleteBtn";
+import SocialPopover from "../SocialPopover/SocialPopover";
 
 interface HaikuCardProps {
    haiku: Haiku;
@@ -67,18 +63,7 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                      </>
                   )}
 
-                  <TooltipProvider>
-                     <Tooltip delayDuration={0}>
-                        <TooltipTrigger asChild>
-                           <Button variant='ghost' size='sm'>
-                              <Share2 className='h-4 w-4' />
-                           </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                           <p>Compartir</p>
-                        </TooltipContent>
-                     </Tooltip>
-                  </TooltipProvider>
+                  <SocialPopover haiku={haiku}/>
                </div>
             </div>
          </CardContent>
