@@ -9,13 +9,8 @@ const TimelineView = () => {
 
    return (
       <>
-         <div className='flex-grow'>
+         <div className='flex-grow pt-5'>
             <Timeline haikus={haikus} loading={loading} />
-         </div>
-         <div className='w-80 relative'>
-            <div className='sticky top-4'>
-               <Sidebar />
-            </div>
          </div>
       </>
    );

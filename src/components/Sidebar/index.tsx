@@ -18,78 +18,81 @@ export default function Sidebar() {
    if (error) return <p>{error}</p>;
 
    return (
-      <aside className='space-y-4'>
-         <div className='relative'>
-            <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400 ' />
-            <Input
-               placeholder='Search Haikus'
-               className='pl-8 bg-white dark:bg-background'
-            />
-         </div>
+      <aside className='h-full flex flex-col overflow-hidden'>
+         <div className='flex-grow overflow-y-auto space-y-4 px-4 py-4 bg-gray-100 dark:bg-gray-900'>
+            {/* Search Input */}
+            <div className='relative'>
+               <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400' />
+               <Input
+                  placeholder='Search Haikus'
+                  className='pl-8 bg-white dark:bg-background'
+               />
+            </div>
 
-         <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
-            <h2 className='font-semibold mb-4'>Haiku del día</h2>
-            {dailyHaiku ? (
-               <div>
-                  <p className='whitespace-pre-line italic mb-2 font-serif'>
-                     {dailyHaiku.text}
-                  </p>
-                  <Link to={`/user/${dailyHaiku.author.id}`}>
-                     <Button
-                        variant='link'
-                        size='sm'
-                        className='text-gray-400 font-thin'
-                     >
-                        <p className='text-sm font-medium'>
-                           — {dailyHaiku.author.firstName}{" "}
-                           {dailyHaiku.author.lastName}
-                        </p>
-                     </Button>
-                  </Link>
-               </div>
-            ) : (
-               <Skeleton className='h-16 w-full min-h-[112px]' />
-            )}
-         </div>
+            <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
+               <h2 className='font-semibold mb-4'>Haiku del día</h2>
+               {dailyHaiku ? (
+                  <div>
+                     <p className='whitespace-pre-line italic mb-2 font-serif'>
+                        {dailyHaiku.text}
+                     </p>
+                     <Link to={`/user/${dailyHaiku.author.id}`}>
+                        <Button
+                           variant='link'
+                           size='sm'
+                           className='text-gray-400 font-thin'
+                        >
+                           <p className='text-sm font-medium'>
+                              — {dailyHaiku.author.firstName}{" "}
+                              {dailyHaiku.author.lastName}
+                           </p>
+                        </Button>
+                     </Link>
+                  </div>
+               ) : (
+                  <Skeleton className='h-16 w-full min-h-[112px]' />
+               )}
+            </div>
 
-         <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
-            <h2 className='font-semibold mb-4'>Haijines sugeridos</h2>
-            {loading ? (
-               <ul className='space-y-4'>
-                  {[...Array(5)].map((_, index) => (
-                     <li
-                        key={index}
-                        className='flex items-center justify-between'
-                     >
-                        <Skeleton className='h-9 w-full' />
-                     </li>
-                  ))}
-               </ul>
-            ) : (
-               <ul className='space-y-4'>
-                  {users &&
-                     users.map((user) => (
+            <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
+               <h2 className='font-semibold mb-4'>Haijines sugeridos</h2>
+               {loading ? (
+                  <ul className='space-y-4'>
+                     {[...Array(3)].map((_, index) => (
                         <li
-                           key={user._id}
+                           key={index}
                            className='flex items-center justify-between'
                         >
-                           <Link to={`/user/${user._id}`}>
-                              <Button
-                                 variant='link'
-                                 className='text-foreground'
-                              >
-                                 <span>
-                                    {user.firstName} {user.lastName}
-                                 </span>
-                              </Button>
-                           </Link>
-                           <Button variant='outline' size='sm'>
-                              Seguir
-                           </Button>
+                           <Skeleton className='h-9 w-full' />
                         </li>
                      ))}
-               </ul>
-            )}
+                  </ul>
+               ) : (
+                  <ul className='space-y-4'>
+                     {users &&
+                        users.map((user) => (
+                           <li
+                              key={user._id}
+                              className='flex items-center justify-between'
+                           >
+                              <Link to={`/user/${user._id}`}>
+                                 <Button
+                                    variant='link'
+                                    className='text-foreground'
+                                 >
+                                    <span>
+                                       {user.firstName} {user.lastName}
+                                    </span>
+                                 </Button>
+                              </Link>
+                              <Button variant='outline' size='sm'>
+                                 Seguir
+                              </Button>
+                           </li>
+                        ))}
+                  </ul>
+               )}
+            </div>
          </div>
       </aside>
    );

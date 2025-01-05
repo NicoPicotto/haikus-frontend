@@ -13,6 +13,12 @@ export const useUser = () => {
 
    const { token, userId } = useAuth();
 
+   // Función para seleccionar 3 usuarios al azar
+   const getRandomUsers = (allUsers: User[], count: number = 3) => {
+      const shuffled = [...allUsers].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+   };
+
    const loadUser = async () => {
       if (!userId) {
          setError(null); // No queremos bloquear todo si no hay usuario
@@ -34,7 +40,8 @@ export const useUser = () => {
       setLoading(true);
       try {
          const data = await fetchUsers();
-         setUsers(data);
+         const randomUsers = getRandomUsers(data, 3); // Seleccionar 3 usuarios al azar
+         setUsers(randomUsers);
          setError(null); // Asegúrate de limpiar cualquier error anterior
       } catch (err) {
          console.error("Error fetching users:", err);
