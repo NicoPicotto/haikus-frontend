@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { User } from "@/types/user";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const UserProfileData = ({ user }: { user: User | null }) => {
+const UserProfileData = ({
+   user,
+   loading,
+}: {
+   user: User | null;
+   loading: boolean;
+}) => {
    const formatMembershipDuration = (createdAt: string) => {
       const createdDate = new Date(createdAt);
       const now = new Date();
@@ -23,18 +30,27 @@ const UserProfileData = ({ user }: { user: User | null }) => {
       <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
          <h2 className='font-semibold mb-4'>Datos del Haijin</h2>
          <div className='relative space-y-4 '>
-            <div>
-               <p className='font-regular'>
-                  {user?.firstName || ""} {user?.lastName || ""}
-               </p>
-
-               <p className='text-gray-400'>{user?.email || ""}</p>
-               {user?.createdAt && (
-                  <p className='text-gray-400'>
-                     {formatMembershipDuration(user.createdAt)}
+            {loading && (
+               <div className='space-y-1'>
+                  <Skeleton className='h-6 w-full' />
+                  <Skeleton className='h-6 w-full' />
+                  <Skeleton className='h-6 w-full' />
+               </div>
+            )}
+            {!loading && user && (
+               <div className='space-y-1'>
+                  <p className='font-regular'>
+                     {user?.firstName || ""} {user?.lastName || ""}
                   </p>
-               )}
-            </div>
+
+                  <p className='text-gray-400'>{user?.email || ""}</p>
+                  {user?.createdAt && (
+                     <p className='text-gray-400'>
+                        {formatMembershipDuration(user.createdAt)}
+                     </p>
+                  )}
+               </div>
+            )}
 
             <Button variant='outline'>Seguir</Button>
          </div>

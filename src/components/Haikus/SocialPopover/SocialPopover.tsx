@@ -34,7 +34,7 @@ const SocialPopover = ({ haiku }: { haiku: Haiku }) => {
          <Tooltip delayDuration={0}>
             <TooltipTrigger>
                <Menubar>
-                  <MenubarMenu>
+                  <MenubarMenu className='rounded-md'>
                      <MenubarTrigger>
                         <Button variant='ghost' size='sm'>
                            <Share2 className='h-4 w-4' />

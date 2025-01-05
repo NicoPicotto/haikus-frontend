@@ -16,7 +16,7 @@ const MeView = () => {
       }
    }, [userId]);
 
-   if (loading) return <p>Loading...</p>;
+   //if (loading) return <p>Loading...</p>;
    if (error) return <p>{error}</p>;
 
    return (
@@ -27,7 +27,7 @@ const MeView = () => {
             </div>
          </div>
          <div className='flex-grow'>
-            <Timeline haikus={userHaikus} />
+            <Timeline haikus={userHaikus} loading={loading} />
          </div>
       </>
    );

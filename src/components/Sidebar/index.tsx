@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { Link } from "react-router-dom";
 import { useHaikusContext } from "@/context/HaikusContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Sidebar() {
    const { users, loading, error, loadUsers } = useUser();
@@ -14,7 +15,6 @@ export default function Sidebar() {
       loadUsers();
    }, []);
 
-   if (loading) return <p>Cargando...</p>;
    if (error) return <p>{error}</p>;
 
    return (
@@ -48,32 +48,48 @@ export default function Sidebar() {
                   </Link>
                </div>
             ) : (
-               <p>Cargando...</p>
+               <Skeleton className='h-16 w-full min-h-[112px]' />
             )}
          </div>
 
          <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
             <h2 className='font-semibold mb-4'>Haijines sugeridos</h2>
-            <ul className='space-y-4'>
-               {users &&
-                  users.map((user) => (
+            {loading ? (
+               <ul className='space-y-4'>
+                  {[...Array(5)].map((_, index) => (
                      <li
-                        key={user._id}
+                        key={index}
                         className='flex items-center justify-between'
                      >
-                        <Link to={`/user/${user._id}`}>
-                           <Button variant='link' className='text-foreground'>
-                              <span>
-                                 {user.firstName} {user.lastName}
-                              </span>
-                           </Button>
-                        </Link>
-                        <Button variant='outline' size='sm'>
-                           Seguir
-                        </Button>
+                        <Skeleton className='h-9 w-full' />
                      </li>
                   ))}
-            </ul>
+               </ul>
+            ) : (
+               <ul className='space-y-4'>
+                  {users &&
+                     users.map((user) => (
+                        <li
+                           key={user._id}
+                           className='flex items-center justify-between'
+                        >
+                           <Link to={`/user/${user._id}`}>
+                              <Button
+                                 variant='link'
+                                 className='text-foreground'
+                              >
+                                 <span>
+                                    {user.firstName} {user.lastName}
+                                 </span>
+                              </Button>
+                           </Link>
+                           <Button variant='outline' size='sm'>
+                              Seguir
+                           </Button>
+                        </li>
+                     ))}
+               </ul>
+            )}
          </div>
       </aside>
    );

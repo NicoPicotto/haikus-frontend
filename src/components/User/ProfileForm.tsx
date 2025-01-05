@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/useUser";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfileForm() {
    const { user, loading, error, handleUpdateUser } = useUser();
@@ -11,7 +12,7 @@ export default function ProfileForm() {
    const [lastName, setLastName] = useState(user?.lastName || "");
    const [email, setEmail] = useState(user?.email || "");
 
-   if (loading) return <p>Cargando información...</p>;
+   //if (loading) return <p>Cargando información...</p>;
    if (error) return <p>Error al cargar los datos: {error}</p>;
 
    const handleSaveChanges = async () => {
@@ -38,21 +39,33 @@ export default function ProfileForm() {
       <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
          <h2 className='font-semibold mb-4'>Datos personales</h2>
          <div className='relative space-y-4'>
-            <Input
-               placeholder='Escribí tu nombre aquí...'
-               defaultValue={user?.firstName || ""}
-               onChange={(e) => setFirstName(e.target.value)}
-            />
-            <Input
-               placeholder='Escribí tu contraseña aquí...'
-               defaultValue={user?.lastName || ""}
-               onChange={(e) => setLastName(e.target.value)}
-            />
-            <Input
-               placeholder='Escribí tu email aquí...'
-               defaultValue={user?.email || ""}
-               onChange={(e) => setEmail(e.target.value)}
-            />
+            {loading && (
+               <>
+                  <Skeleton className='h-9 w-full' />
+                  <Skeleton className='h-9 w-full' />
+                  <Skeleton className='h-9 w-full' />
+               </>
+            )}
+            {!loading && user && (
+               <>
+                  <Input
+                     placeholder='Escribí tu nombre aquí...'
+                     defaultValue={user?.firstName || ""}
+                     onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  <Input
+                     placeholder='Escribí tu contraseña aquí...'
+                     defaultValue={user?.lastName || ""}
+                     onChange={(e) => setLastName(e.target.value)}
+                  />
+                  <Input
+                     placeholder='Escribí tu email aquí...'
+                     defaultValue={user?.email || ""}
+                     onChange={(e) => setEmail(e.target.value)}
+                  />
+               </>
+            )}
+
             <Button variant='outline' onClick={handleSaveChanges}>
                Guardar cambios
             </Button>

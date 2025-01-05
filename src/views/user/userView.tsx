@@ -30,7 +30,7 @@ const UserView = () => {
       }
    }, [id]);
 
-   if (haikusLoading || userLoading) return <p>Loading...</p>;
+   //if (haikusLoading || userLoading) return <p>Loading...</p>;
    if (haikusError || userError)
       return <p>Error: {haikusError || userError}</p>;
 
@@ -38,11 +38,11 @@ const UserView = () => {
       <>
          <div className='w-80 relative'>
             <div className='sticky top-4'>
-               <UserProfileData user={selectedUser} />{" "}
+               <UserProfileData user={selectedUser} loading={userLoading} />{" "}
             </div>
          </div>
          <div className='flex-grow'>
-            <Timeline haikus={userHaikus} />
+            <Timeline haikus={userHaikus} loading={haikusLoading} />
          </div>
       </>
    );

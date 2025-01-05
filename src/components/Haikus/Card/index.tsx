@@ -25,11 +25,13 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
    const isAuthor = userData?.id === haiku.author.id;
 
    return (
-      <Card className='overflow-hidden dark:bg-gray-800'>
-         <CardContent className='p-6'>
-            <p className='whitespace-pre-line font-serif text-2xl mb-4 text-center leading-relaxed'>
+      <Card className='overflow-hidden dark:bg-gray-800 min-h-[213px] h-full flex flex-col'>
+         <CardContent className='p-6 flex flex-col flex-grow'>
+            {/* Haiku Text */}
+            <p className='whitespace-pre-line font-serif text-2xl mb-4 text-center leading-relaxed flex-grow'>
                {haiku.text}
             </p>
+            {/* Footer: Author and Actions */}
             <div className='flex items-center justify-between mt-4'>
                <Link to={`/user/${haiku.author.id}`}>
                   <Button
@@ -38,7 +40,6 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                      className='text-gray-400 font-thin'
                   >
                      <PencilLine className='h-4 w-4 mr-1' />
-
                      <p className='text-sm font-medium'>
                         {haiku.author.firstName} {haiku.author.lastName}
                      </p>
@@ -48,22 +49,13 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                   <p className='text-gray-400 text-sm pt-1.5 mr-1'>
                      {formattedDate}
                   </p>
-                  {/* <Button variant='ghost' size='sm'>
-                     <Heart className='h-4 w-4' />
-                     {haiku.likes}
-                  </Button>
-                  <Button variant='ghost' size='sm'>
-                     <MessageCircle className='h-4 w-4' />
-                     {haiku.comments}
-                  </Button> */}
                   {isAuthor && (
                      <>
                         <UpdateBtn haiku={haiku} />
                         <DeleteBtn haikuId={haiku._id} />
                      </>
                   )}
-
-                  <SocialPopover haiku={haiku}/>
+                  <SocialPopover haiku={haiku} />
                </div>
             </div>
          </CardContent>
