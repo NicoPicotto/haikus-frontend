@@ -20,7 +20,8 @@ export default function Timeline({
          {loading
             ? [...Array(5)].map((_, index) => <SkeletonCard key={index} />)
             : haikus.map((haiku) => {
-                 const liked = haiku.likes.includes(userId || ""); // Verifica si el usuario ya dio like
+                 const liked = haiku.likes.includes(userId || "");
+                 const isSaved = (haiku.savedBy || []).includes(userId || "");
 
                  return (
                     <HaikuCard
@@ -30,8 +31,19 @@ export default function Timeline({
                           onHaikuUpdate({
                              ...haiku,
                              likes: liked
-                                ? haiku.likes.filter((id) => id !== userId) // Remueve el like si ya existe
-                                : [...haiku.likes, ...(userId ? [userId] : [])], // Agrega el like si no existe
+                                ? haiku.likes.filter((id) => id !== userId)
+                                : [...haiku.likes, ...(userId ? [userId] : [])],
+                          })
+                       }
+                       onSaveUpdate={() =>
+                          onHaikuUpdate({
+                             ...haiku,
+                             savedBy: isSaved
+                                ? haiku.savedBy.filter((id) => id !== userId)
+                                : [
+                                     ...haiku.savedBy,
+                                     ...(userId ? [userId] : []),
+                                  ],
                           })
                        }
                     />

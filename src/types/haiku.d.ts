@@ -13,4 +13,5 @@ export interface Haiku {
    _id: string;
    likesCount?: number;
    liked?: boolean;
+   savedBy: string[];
 }

@@ -2,20 +2,25 @@ import { PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
 import UpdateBtn from "../UpdateBtn";
 import DeleteBtn from "../DeleteBtn";
 import SocialPopover from "../SocialPopover/SocialPopover";
 import LikeBtn from "../LikeBtn";
+import SaveBtn from "../SaveBtn";
 
 interface HaikuCardProps {
    haiku: Haiku;
    onLikeUpdate: (updatedHaiku: Haiku) => void;
+   onSaveUpdate: (updatedHaiku: Haiku) => void;
 }
 
-export default function HaikuCard({ haiku, onLikeUpdate }: HaikuCardProps) {
+export default function HaikuCard({
+   haiku,
+   onLikeUpdate,
+   onSaveUpdate,
+}: HaikuCardProps) {
    const { userData } = useAuth();
 
    const formattedDate = new Intl.DateTimeFormat("es-ES", {
@@ -28,6 +33,13 @@ export default function HaikuCard({ haiku, onLikeUpdate }: HaikuCardProps) {
 
    const handleLikeUpdate = (likesCount: number, liked: boolean) => {
       onLikeUpdate({ ...haiku, likesCount, liked });
+   };
+
+   const handleSaveUpdate = (isSaved: boolean) => {
+      const updatedSavedBy = isSaved
+         ? [...haiku.savedBy, userData?.id || ""]
+         : haiku.savedBy.filter((id) => id !== userData?.id);
+      onSaveUpdate({ ...haiku, savedBy: updatedSavedBy });
    };
 
    return (
@@ -64,6 +76,13 @@ export default function HaikuCard({ haiku, onLikeUpdate }: HaikuCardProps) {
                      liked={haiku.likes.includes(userData?.id || "")}
                      likesCount={haiku.likes.length}
                      onUpdate={handleLikeUpdate}
+                  />
+                  <SaveBtn
+                     haikuId={haiku._id}
+                     isSaved={(haiku.savedBy || []).includes(
+                        userData?.id || ""
+                     )}
+                     onToggleSave={handleSaveUpdate}
                   />
                   <SocialPopover haiku={haiku} />
                </div>
