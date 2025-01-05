@@ -23,9 +23,6 @@ export default function Header() {
                </h1>
             </Link>
             <nav className='flex items-center space-x-4'>
-               {/* <Button variant='ghost' size='icon'>
-                  <Bell className='h-5 w-5' />
-               </Button> */}
                {userData && (
                   <>
                      <TooltipProvider>

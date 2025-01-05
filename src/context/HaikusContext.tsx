@@ -14,6 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 
 interface HaikusContextType {
    haikus: Haiku[];
+   setHaikus: React.Dispatch<React.SetStateAction<Haiku[]>>;
    userHaikus: Haiku[];
    dailyHaiku: Haiku | null;
    loading: boolean;
@@ -177,6 +178,7 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
       <HaikusContext.Provider
          value={{
             haikus,
+            setHaikus,
             userHaikus,
             loading,
             error,
