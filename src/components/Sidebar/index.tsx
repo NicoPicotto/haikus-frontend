@@ -18,7 +18,7 @@ export default function Sidebar() {
    if (error) return <p>{error}</p>;
 
    return (
-      <aside className='h-full flex flex-col overflow-hidden'>
+      <aside className='h-full flex flex-col overflow-hidden '>
          <div className='flex-grow overflow-y-auto space-y-4 px-4 py-4 bg-gray-100 dark:bg-gray-900'>
             {/* Search Input */}
             <div className='relative'>
@@ -63,7 +63,7 @@ export default function Sidebar() {
                            key={index}
                            className='flex items-center justify-between'
                         >
-                           <Skeleton className='h-9 w-full' />
+                           <Skeleton className='h-5 my-2 w-full' />
                         </li>
                      ))}
                   </ul>
@@ -93,6 +93,15 @@ export default function Sidebar() {
                   </ul>
                )}
             </div>
+            {/* <iframe
+               src='https://open.spotify.com/embed/playlist/37i9dQZF1DX0x3hhpH7R9I?utm_source=generator'
+               width='100%'
+               height='400'
+               frameBorder='0'
+               allowfullscreen=''
+               allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
+               loading='lazy'
+            ></iframe> */}
          </div>
       </aside>
    );

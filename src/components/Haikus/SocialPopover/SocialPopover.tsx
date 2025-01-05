@@ -34,7 +34,7 @@ const SocialPopover = ({ haiku }: { haiku: Haiku }) => {
          <Tooltip delayDuration={0}>
             <TooltipTrigger>
                <Menubar>
-                  <MenubarMenu className='rounded-md'>
+                  <MenubarMenu>
                      <MenubarTrigger>
                         <Button variant='ghost' size='sm'>
                            <Share2 className='h-4 w-4' />
@@ -47,8 +47,13 @@ const SocialPopover = ({ haiku }: { haiku: Haiku }) => {
                               href={shareLinks.twitter}
                               target='_blank'
                               rel='noreferrer'
+                              className='w-full'
                            >
-                              <Button variant='ghost' size='sm'>
+                              <Button
+                                 variant='ghost'
+                                 className='w-full'
+                                 size='sm'
+                              >
                                  Compartir en X
                               </Button>
                            </a>
@@ -60,8 +65,13 @@ const SocialPopover = ({ haiku }: { haiku: Haiku }) => {
                               href={shareLinks.whatsapp}
                               target='_blank'
                               rel='noreferrer'
+                              className='w-full'
                            >
-                              <Button variant='ghost' size='sm'>
+                              <Button
+                                 variant='ghost'
+                                 className='w-full'
+                                 size='sm'
+                              >
                                  Compartir en WhatsApp
                               </Button>
                            </a>
@@ -73,8 +83,13 @@ const SocialPopover = ({ haiku }: { haiku: Haiku }) => {
                               href={shareLinks.facebook}
                               target='_blank'
                               rel='noreferrer'
+                              className='w-full'
                            >
-                              <Button variant='ghost' size='sm'>
+                              <Button
+                                 variant='ghost'
+                                 className='w-full'
+                                 size='sm'
+                              >
                                  Compartir en Facebook
                               </Button>
                            </a>

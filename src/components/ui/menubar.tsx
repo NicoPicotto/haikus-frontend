@@ -21,7 +21,7 @@ const Menubar = React.forwardRef<
    <MenubarPrimitive.Root
       ref={ref}
       className={cn(
-         "flex transition-colors rounded-md items-center space-x-1  bg-background",
+         "flex transition-colors rounded-md items-center space-x-1  bg-background dark:bg-gray-800",
          className
       )}
       {...props}
@@ -120,7 +120,7 @@ const MenubarItem = React.forwardRef<
    <MenubarPrimitive.Item
       ref={ref}
       className={cn(
-         "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+         "relative flex cursor-default select-none items-center rounded-sm text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
          inset && "pl-8",
          className
       )}
