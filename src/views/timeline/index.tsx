@@ -8,7 +8,7 @@ const TimelineView = () => {
 
    return (
       <>
-         <div className='flex-grow pt-5'>
+         <div className='flex-grow pt-5 pb-5'>
             <Timeline haikus={haikus} loading={loading} />
          </div>
       </>
