@@ -1,21 +1,42 @@
 import HaikuCard from "../Haikus/Card";
 import { Haiku } from "@/types/haiku";
 import { Skeleton } from "../ui/skeleton";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Timeline({
    haikus,
    loading,
+   onHaikuUpdate,
 }: {
    haikus: Haiku[];
    loading: boolean;
+   onHaikuUpdate: (updatedHaiku: Haiku) => void;
 }) {
+   const { userData } = useAuth();
+   const userId = userData?.id;
+
    return (
       <div className='space-y-4'>
          {loading
             ? [...Array(5)].map((_, index) => <SkeletonCard key={index} />)
-            : haikus.map((haiku) => (
-                 <HaikuCard key={haiku._id} haiku={haiku} />
-              ))}
+            : haikus.map((haiku) => {
+                 const liked = haiku.likes.includes(userId || ""); // Verifica si el usuario ya dio like
+
+                 return (
+                    <HaikuCard
+                       key={haiku._id}
+                       haiku={haiku}
+                       onLikeUpdate={() =>
+                          onHaikuUpdate({
+                             ...haiku,
+                             likes: liked
+                                ? haiku.likes.filter((id) => id !== userId) // Remueve el like si ya existe
+                                : [...haiku.likes, ...(userId ? [userId] : [])], // Agrega el like si no existe
+                          })
+                       }
+                    />
+                 );
+              })}
       </div>
    );
 }

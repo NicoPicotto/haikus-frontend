@@ -8,12 +8,14 @@ import { useAuth } from "@/context/AuthContext";
 import UpdateBtn from "../UpdateBtn";
 import DeleteBtn from "../DeleteBtn";
 import SocialPopover from "../SocialPopover/SocialPopover";
+import LikeBtn from "../LikeBtn";
 
 interface HaikuCardProps {
    haiku: Haiku;
+   onLikeUpdate: (updatedHaiku: Haiku) => void;
 }
 
-export default function HaikuCard({ haiku }: HaikuCardProps) {
+export default function HaikuCard({ haiku, onLikeUpdate }: HaikuCardProps) {
    const { userData } = useAuth();
 
    const formattedDate = new Intl.DateTimeFormat("es-ES", {
@@ -23,6 +25,10 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
    }).format(new Date(haiku.date));
 
    const isAuthor = userData?.id === haiku.author.id;
+
+   const handleLikeUpdate = (likesCount: number, liked: boolean) => {
+      onLikeUpdate({ ...haiku, likesCount, liked });
+   };
 
    return (
       <Card className='overflow-hidden dark:bg-gray-800 min-h-[213px] h-full flex flex-col'>
@@ -53,6 +59,12 @@ export default function HaikuCard({ haiku }: HaikuCardProps) {
                         <DeleteBtn haikuId={haiku._id} />
                      </>
                   )}
+                  <LikeBtn
+                     haikuId={haiku._id}
+                     liked={haiku.likes.includes(userData?.id || "")}
+                     likesCount={haiku.likes.length}
+                     onUpdate={handleLikeUpdate}
+                  />
                   <SocialPopover haiku={haiku} />
                </div>
             </div>

@@ -76,3 +76,21 @@ export const fetchDailyHaiku = async () => {
       throw error;
    }
 };
+
+export const toggleLikeHaiku = async (id: string, token: string) => {
+   try {
+      const response = await axios.patch(
+         `${HAIKUS_SERVICE}/${id}/like`,
+         {},
+         {
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+         }
+      );
+      return response.data;
+   } catch (error) {
+      console.error("Error updating haiku:", error);
+      throw error;
+   }
+};

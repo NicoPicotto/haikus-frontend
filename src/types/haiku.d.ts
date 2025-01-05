@@ -9,7 +9,8 @@ export interface Haiku {
    text: string;
    date: string;
    author: Author;
-   likes: number;
-   comments: number;
+   likes: string[];
    _id: string;
+   likesCount?: number;
+   liked?: boolean;
 }
