@@ -8,6 +8,7 @@ import { HaikusProvider } from "./context/HaikusContext";
 import MeView from "./views/user/meView";
 import UserView from "./views/user/userView";
 import RegisterView from "./views/auth/register";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
    return (
@@ -43,9 +44,11 @@ function App() {
                      <Route
                         path='/me'
                         element={
-                           <Layout>
-                              <MeView />
-                           </Layout>
+                           <PrivateRoute>
+                              <Layout>
+                                 <MeView />
+                              </Layout>
+                           </PrivateRoute>
                         }
                      />
                      <Route

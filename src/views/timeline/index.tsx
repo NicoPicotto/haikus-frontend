@@ -33,7 +33,7 @@ const TimelineView = () => {
             />
          </div>
          <div className='w-80 relative'>
-            <div className='sticky top-16'>
+            <div className='sticky top-20'>
                <Sidebar />
             </div>
          </div>
