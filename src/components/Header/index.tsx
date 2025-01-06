@@ -78,7 +78,7 @@ export default function Header() {
 
                <ModeToggle />
                {!userData && (
-                  <Link to='login'>
+                  <Link to='/login'>
                      <Button>
                         <PenTool className='h-5 w-5 mr-2' />
                         Componer
