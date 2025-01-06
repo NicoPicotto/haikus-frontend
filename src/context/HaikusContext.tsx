@@ -8,6 +8,7 @@ import {
    fetchHaikuByUser,
    deleteHaiku,
    fetchDailyHaiku,
+   toggleSaveHaiku,
 } from "../services/haikusService";
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
@@ -25,6 +26,10 @@ interface HaikusContextType {
    loadHaikus: () => Promise<void>;
    loadHaikusByUser: (userId: string) => Promise<void>;
    loadDailyHaiku: () => Promise<void>;
+   handleToggleSave: (
+      haikuId: string,
+      token: string
+   ) => Promise<{ isSaved: boolean }>;
 }
 
 const HaikusContext = createContext<HaikusContextType | undefined>(undefined);
@@ -37,15 +42,29 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
    const [dailyHaiku, setDailyHaiku] = useState<Haiku | null>(null);
    const [loading, setLoading] = useState<boolean>(false);
    const [error, setError] = useState<string | null>(null);
-   const { token } = useAuth();
+   const { token, userData, updateSavedHaikus } = useAuth();
    const { toast } = useToast();
 
-   const loadHaikus = async () => {
+   const loadHaikus = async (): Promise<void> => {
       setLoading(true);
       try {
-         const data = await fetchHaikus();
+         const data: Haiku[] = await fetchHaikus();
 
-         setHaikus(data);
+         // Si no hay userData, no se puede mapear isSaved
+         if (!userData) {
+            console.warn("No user data available, skipping isSaved mapping");
+            setHaikus(data); // Cargar los haikus tal cual
+            return;
+         }
+
+         // Mapear isSaved si hay userData
+         const savedHaikus = userData.savedHaikus || [];
+         const updatedHaikus = data.map((haiku) => ({
+            ...haiku,
+            isSaved: savedHaikus.includes(haiku._id),
+         }));
+
+         setHaikus(updatedHaikus); // Actualizar el estado
       } catch (err) {
          console.error("Error fetching haikus:", err);
          setError("Failed to load haikus. Please try again.");
@@ -166,19 +185,57 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
       }
    };
 
+   const handleToggleSave = async (haikuId: string, token: string) => {
+      try {
+         const response = await toggleSaveHaiku(haikuId, token);
+         const { isSaved } = response;
+
+         // Actualiza el estado de los haikus localmente
+         setHaikus((prevHaikus) =>
+            prevHaikus.map((haiku) =>
+               haiku._id === haikuId ? { ...haiku, isSaved } : haiku
+            )
+         );
+
+         // Actualiza el estado de savedHaikus en AuthContext
+         const updatedSavedHaikus = isSaved
+            ? [...(userData?.savedHaikus || []), haikuId] // Añadir
+            : userData?.savedHaikus.filter((id) => id !== haikuId) || []; // Eliminar
+
+         updateSavedHaikus(updatedSavedHaikus);
+
+         return { isSaved }; // Devuelve el nuevo estado
+      } catch (error) {
+         console.error("Error en handleToggleSave:", error);
+         throw error;
+      }
+   };
+
    useEffect(() => {
       const fetchData = async () => {
-         await loadHaikus(); // Cargar todos los Haikus
-         await loadDailyHaiku(); // Cargar el Haiku del día
+         console.log("Cargando haikus al montar...");
+         await loadHaikus();
+         await loadDailyHaiku();
       };
-      fetchData();
-   }, []);
 
+      fetchData();
+   }, []); // Se ejecuta solo al montar el componente
+
+   useEffect(() => {
+      if (userData) {
+         console.log("Actualizando haikus después del login...");
+         const fetchSavedHaikus = async () => {
+            await loadHaikus(); // Actualiza el estado `isSaved` después del login
+         };
+         fetchSavedHaikus();
+      }
+   }, [userData?.id]); // Solo se dispara cuando el ID de usuario cambia (login/logout)
    return (
       <HaikusContext.Provider
          value={{
             haikus,
             setHaikus,
+            handleToggleSave,
             userHaikus,
             loading,
             error,

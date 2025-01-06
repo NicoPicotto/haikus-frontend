@@ -21,7 +21,7 @@ export const useUser = () => {
 
    const loadUser = async () => {
       if (!userId) {
-         setError(null); // No queremos bloquear todo si no hay usuario
+         setError(null);
          return;
       }
       setLoading(true);

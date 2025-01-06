@@ -16,7 +16,7 @@ export default function Timeline({
    const userId = userData?.id;
 
    return (
-      <div className='space-y-4'>
+      <div className='space-y-4 py-2'>
          {loading
             ? [...Array(5)].map((_, index) => <SkeletonCard key={index} />)
             : haikus.map((haiku) => {

@@ -19,7 +19,7 @@ export default function Sidebar() {
 
    return (
       <aside className='h-full flex flex-col overflow-hidden '>
-         <div className='flex-grow overflow-y-auto space-y-4 px-4 py-4 bg-gray-100 dark:bg-gray-900'>
+         <div className='flex-grow overflow-y-auto space-y-4 px-4 py-2 bg-gray-100 dark:bg-gray-900'>
             {/* Search Input */}
             <div className='relative'>
                <Search className='absolute left-2 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400' />

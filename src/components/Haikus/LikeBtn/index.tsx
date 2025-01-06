@@ -42,9 +42,7 @@ const LikeBtn = ({ haikuId, liked, likesCount, onUpdate }: LikeBtnProps) => {
          onClick={handleToggleLike}
          disabled={isLiking || !token}
       >
-         <Heart
-            className={`h-4 w-4 ${liked ? "text-red-500" : "text-gray-500"}`}
-         />
+         <Heart className={`h-4 w-4 ${liked ? "text-red-500" : null}`} />
          <span className='text-sm'>{likesCount}</span>
       </Button>
    );

@@ -106,7 +106,10 @@ export const toggleSaveHaiku = async (id: string, token: string) => {
             },
          }
       );
-      return response.data;
+      return {
+         haikuId: response.data.haikuId,
+         isSaved: response.data.isSaved, // Usar la propiedad explícita del backend
+      };
    } catch (error) {
       console.error("Error toggling save haiku:", error);
       throw error;

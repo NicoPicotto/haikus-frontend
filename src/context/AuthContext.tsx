@@ -10,6 +10,7 @@ interface UserData {
    email: string;
    firstName: string;
    lastName: string;
+   savedHaikus: string[];
 }
 
 // Interfaz para el contexto de autenticación
@@ -23,6 +24,8 @@ interface AuthContextType {
       firstName: string,
       lastName: string
    ) => Promise<void>;
+   updateSavedHaikus: (updatedSavedHaikus: string[]) => void;
+   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
 }
 
 // Crear el contexto con un valor inicial tipado
@@ -82,6 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            savedHaikus: user.savedHaikus,
          });
          console.log("Login successful:", { token, user });
       } catch (error: unknown) {
@@ -116,6 +120,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            savedHaikus: user.savedHaikus,
          });
 
          console.log("Registration successful:", { token, user });
@@ -134,8 +139,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserData(null);
    };
 
+   const updateSavedHaikus = (updatedSavedHaikus: string[]) => {
+      console.log("Intentando actualizar savedHaikus con:", updatedSavedHaikus);
+
+      // Asegúrate de que no haya duplicados al actualizar userData
+      setUserData((prev) => {
+         if (!prev) {
+            console.warn("No previous userData available, skipping update.");
+            return null;
+         }
+
+         const uniqueSavedHaikus = Array.from(new Set(updatedSavedHaikus));
+         console.log("Unique savedHaikus:", uniqueSavedHaikus);
+
+         const newUserData = {
+            ...prev,
+            savedHaikus: uniqueSavedHaikus,
+         };
+
+         console.log(
+            "Nuevo estado de userData después de actualizar savedHaikus:",
+            newUserData
+         );
+         return newUserData;
+      });
+   };
+
    return (
-      <AuthContext.Provider value={{ userData, login, logout, register }}>
+      <AuthContext.Provider
+         value={{
+            userData,
+            setUserData,
+            login,
+            logout,
+            register,
+            updateSavedHaikus,
+         }}
+      >
          {children}
       </AuthContext.Provider>
    );

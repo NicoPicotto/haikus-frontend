@@ -39,7 +39,12 @@ export default function HaikuCard({
       const updatedSavedBy = isSaved
          ? [...haiku.savedBy, userData?.id || ""]
          : haiku.savedBy.filter((id) => id !== userData?.id);
-      onSaveUpdate({ ...haiku, savedBy: updatedSavedBy });
+
+      onSaveUpdate({
+         ...haiku,
+         savedBy: updatedSavedBy,
+         isSaved,
+      });
    };
 
    return (
@@ -79,9 +84,7 @@ export default function HaikuCard({
                   />
                   <SaveBtn
                      haikuId={haiku._id}
-                     isSaved={(haiku.savedBy || []).includes(
-                        userData?.id || ""
-                     )}
+                     isSaved={!!haiku.isSaved}
                      onToggleSave={handleSaveUpdate}
                   />
                   <SocialPopover haiku={haiku} />
