@@ -5,6 +5,8 @@ import { useHaikusContext } from "@/context/HaikusContext";
 import { useUser } from "@/hooks/useUser";
 import { useParams } from "react-router-dom";
 import UserProfileData from "@/components/User/UserProfileData";
+import { Haiku } from "@/types/haiku";
+import { useAuth } from "@/context/AuthContext";
 
 const UserView = () => {
    const {
@@ -12,6 +14,7 @@ const UserView = () => {
       loading: haikusLoading,
       error: haikusError,
       loadHaikusByUser,
+      setHaikus,
    } = useHaikusContext();
 
    const {
@@ -22,6 +25,7 @@ const UserView = () => {
    } = useUser();
 
    const { id } = useParams<{ id: string }>();
+   const { userData } = useAuth();
 
    useEffect(() => {
       if (id) {
@@ -34,6 +38,18 @@ const UserView = () => {
    if (haikusError || userError)
       return <p>Error: {haikusError || userError}</p>;
 
+   // Función para actualizar un haiku en el estado
+   const handleHaikuUpdate = (updatedHaiku: Haiku) => {
+      const isSaved = updatedHaiku.savedBy.includes(userData?.id || "");
+      setHaikus((prevHaikus) =>
+         prevHaikus.map((haiku) =>
+            haiku._id === updatedHaiku._id
+               ? { ...updatedHaiku, isSaved }
+               : haiku
+         )
+      );
+   };
+
    return (
       <>
          <div className='w-80 relative'>
@@ -42,7 +58,11 @@ const UserView = () => {
             </div>
          </div>
          <div className='flex-grow'>
-            <Timeline haikus={userHaikus} loading={haikusLoading} />
+            <Timeline
+               haikus={userHaikus}
+               loading={haikusLoading}
+               onHaikuUpdate={handleHaikuUpdate}
+            />
          </div>
       </>
    );
