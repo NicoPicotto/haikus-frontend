@@ -4,11 +4,13 @@ import Timeline from "@/components/Timeline";
 import { useAuth } from "@/context/AuthContext";
 import ProfileForm from "@/components/User/ProfileForm";
 import { useHaikusContext } from "@/context/HaikusContext";
+import { Haiku } from "@/types/haiku";
 
 const MeView = () => {
-   const { userHaikus, loading, error, loadHaikusByUser } = useHaikusContext();
+   const { userHaikus, loading, error, loadHaikusByUser, setHaikus } =
+      useHaikusContext();
 
-   const { userId } = useAuth();
+   const { userId, userData } = useAuth();
 
    useEffect(() => {
       if (userId) {
@@ -19,6 +21,18 @@ const MeView = () => {
    //if (loading) return <p>Loading...</p>;
    if (error) return <p>{error}</p>;
 
+   // Función para actualizar un haiku en el estado
+   const handleHaikuUpdate = (updatedHaiku: Haiku) => {
+      const isSaved = updatedHaiku.savedBy.includes(userData?.id || "");
+      setHaikus((prevHaikus) =>
+         prevHaikus.map((haiku) =>
+            haiku._id === updatedHaiku._id
+               ? { ...updatedHaiku, isSaved }
+               : haiku
+         )
+      );
+   };
+
    return (
       <>
          <div className='w-80 relative'>
@@ -27,7 +41,11 @@ const MeView = () => {
             </div>
          </div>
          <div className='flex-grow'>
-            <Timeline haikus={userHaikus} loading={loading} />
+            <Timeline
+               haikus={userHaikus}
+               loading={loading}
+               onHaikuUpdate={handleHaikuUpdate}
+            />
          </div>
       </>
    );
