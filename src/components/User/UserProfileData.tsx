@@ -27,7 +27,7 @@ const UserProfileData = ({
    };
 
    return (
-      <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow'>
+      <div className='bg-white dark:bg-gray-800 p-4 mt-2 rounded-lg shadow'>
          <h2 className='font-semibold mb-4'>Datos del Haijin</h2>
          <div className='relative space-y-4 '>
             {loading && (

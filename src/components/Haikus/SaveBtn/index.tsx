@@ -58,7 +58,7 @@ const SaveBtn = ({ haikuId, isSaved, onToggleSave }: SaveBtnProps) => {
          aria-label={isSaved ? "Unsave Haiku" : "Save Haiku"}
       >
          {isSaved ? (
-            <BookmarkCheck className='h-4 w-4 text-blue-500' />
+            <BookmarkCheck className='h-4 w-4 text-red-500' />
          ) : (
             <Bookmark className='h-4 w-4' />
          )}
