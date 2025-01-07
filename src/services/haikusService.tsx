@@ -108,10 +108,24 @@ export const toggleSaveHaiku = async (id: string, token: string) => {
       );
       return {
          haikuId: response.data.haikuId,
-         isSaved: response.data.isSaved, // Usar la propiedad explícita del backend
+         isSaved: response.data.isSaved,
       };
    } catch (error) {
       console.error("Error toggling save haiku:", error);
+      throw error;
+   }
+};
+
+export const fetchSavedHaikus = async (token: string) => {
+   try {
+      const response = await axios.get(`${HAIKUS_SERVICE}/saved`, {
+         headers: {
+            Authorization: `Bearer ${token}`,
+         },
+      });
+      return response.data;
+   } catch (error) {
+      console.error("Error fetching saved haikus:", error);
       throw error;
    }
 };

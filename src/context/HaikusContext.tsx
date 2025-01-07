@@ -9,6 +9,7 @@ import {
    deleteHaiku,
    fetchDailyHaiku,
    toggleSaveHaiku,
+   fetchSavedHaikus,
 } from "../services/haikusService";
 import { Haiku } from "@/types/haiku";
 import { useAuth } from "@/context/AuthContext";
@@ -17,6 +18,7 @@ interface HaikusContextType {
    haikus: Haiku[];
    setHaikus: React.Dispatch<React.SetStateAction<Haiku[]>>;
    userHaikus: Haiku[];
+   savedHaikus: Haiku[];
    dailyHaiku: Haiku | null;
    loading: boolean;
    error: string | null;
@@ -24,6 +26,7 @@ interface HaikusContextType {
    handleUpdateHaiku: (id: string, text: string) => Promise<void>;
    handleDeleteHaiku: (id: string) => Promise<void>;
    loadHaikus: () => Promise<void>;
+   loadSavedHaikus: () => Promise<void>;
    loadHaikusByUser: (userId: string) => Promise<void>;
    loadDailyHaiku: () => Promise<void>;
    handleToggleSave: (
@@ -40,6 +43,7 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
    const [haikus, setHaikus] = useState<Haiku[]>([]);
    const [userHaikus, setUserHaikus] = useState<Haiku[]>([]);
    const [dailyHaiku, setDailyHaiku] = useState<Haiku | null>(null);
+   const [savedHaikus, setSavedHaikus] = useState<Haiku[]>([]);
    const [loading, setLoading] = useState<boolean>(false);
    const [error, setError] = useState<string | null>(null);
    const { token, userData, updateSavedHaikus } = useAuth();
@@ -139,6 +143,24 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
       } catch (err) {
          console.error("Error fetching haikus by user:", err);
          setError("Failed to load haikus for the user. Please try again.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const loadSavedHaikus = async () => {
+      if (!token) return;
+      setLoading(true);
+      try {
+         const data: Haiku[] = await fetchSavedHaikus(token);
+         const updatedHaikus = data.map((haiku) => ({
+            ...haiku,
+            isSaved: true, // Asegúrate de asignar explícitamente esta propiedad
+         }));
+         setSavedHaikus(updatedHaikus);
+      } catch (err) {
+         console.error("Error fetching saved haikus:", err);
+         setError("No se pudieron cargar los haikus guardados.");
       } finally {
          setLoading(false);
       }
@@ -246,6 +268,8 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
             loadHaikusByUser,
             loadDailyHaiku,
             dailyHaiku,
+            savedHaikus,
+            loadSavedHaikus,
          }}
       >
          {children}

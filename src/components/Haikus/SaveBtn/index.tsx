@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useHaikusContext } from "@/context/HaikusContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface SaveBtnProps {
    haikuId: string;
@@ -14,6 +15,7 @@ const SaveBtn = ({ haikuId, isSaved, onToggleSave }: SaveBtnProps) => {
    const [isSaving, setIsSaving] = useState(false);
    const { token } = useAuth();
    const { handleToggleSave } = useHaikusContext();
+   const { toast } = useToast();
 
    const handleClick = async () => {
       if (!token) {
@@ -25,6 +27,16 @@ const SaveBtn = ({ haikuId, isSaved, onToggleSave }: SaveBtnProps) => {
 
       try {
          const { isSaved: newIsSaved } = await handleToggleSave(haikuId, token);
+
+         toast({
+            title: newIsSaved
+               ? "Haiku Guardado"
+               : "Haiku eliminado de guardados",
+            description: newIsSaved
+               ? "El haiku se ha guardado en tu colección."
+               : "El haiku se ha eliminado de tus guardados.",
+            variant: "success",
+         });
 
          console.log(`Nuevo estado isSaved para ${haikuId}:`, newIsSaved);
 

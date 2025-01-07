@@ -14,12 +14,14 @@ interface HaikuCardProps {
    haiku: Haiku;
    onLikeUpdate: (updatedHaiku: Haiku) => void;
    onSaveUpdate: (updatedHaiku: Haiku) => void;
+   isProfile?: boolean;
 }
 
 export default function HaikuCard({
    haiku,
    onLikeUpdate,
    onSaveUpdate,
+   isProfile,
 }: HaikuCardProps) {
    const { userData } = useAuth();
 
@@ -76,17 +78,22 @@ export default function HaikuCard({
                         <DeleteBtn haikuId={haiku._id} />
                      </>
                   )}
-                  <LikeBtn
-                     haikuId={haiku._id}
-                     liked={haiku.likes.includes(userData?.id || "")}
-                     likesCount={haiku.likes.length}
-                     onUpdate={handleLikeUpdate}
-                  />
-                  <SaveBtn
-                     haikuId={haiku._id}
-                     isSaved={!!haiku.isSaved}
-                     onToggleSave={handleSaveUpdate}
-                  />
+                  {!isProfile && (
+                     <>
+                        <LikeBtn
+                           haikuId={haiku._id}
+                           liked={haiku.likes.includes(userData?.id || "")}
+                           likesCount={haiku.likes.length}
+                           onUpdate={handleLikeUpdate}
+                        />
+                        <SaveBtn
+                           haikuId={haiku._id}
+                           isSaved={!!haiku.isSaved}
+                           onToggleSave={handleSaveUpdate}
+                        />
+                     </>
+                  )}
+
                   <SocialPopover haiku={haiku} />
                </div>
             </div>

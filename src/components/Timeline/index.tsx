@@ -7,9 +7,11 @@ export default function Timeline({
    haikus,
    loading,
    onHaikuUpdate,
+   isProfile,
 }: {
    haikus: Haiku[];
    loading: boolean;
+   isProfile?: boolean;
    onHaikuUpdate: (updatedHaiku: Haiku) => void;
 }) {
    const { userData } = useAuth();
@@ -27,6 +29,7 @@ export default function Timeline({
                     <HaikuCard
                        key={haiku._id}
                        haiku={haiku}
+                       isProfile={isProfile}
                        onLikeUpdate={() =>
                           onHaikuUpdate({
                              ...haiku,
