@@ -138,11 +138,23 @@ export const HaikusProvider: React.FC<{ children: React.ReactNode }> = ({
    const loadHaikusByUser = async (userId: string) => {
       setLoading(true);
       try {
-         const data = await fetchHaikuByUser(userId); // Llama al servicio para obtener haikus por usuario
-         setUserHaikus(data); // Actualiza el estado de userHaikus
+         const data: Haiku[] = await fetchHaikuByUser(userId);
+
+         if (!userData) {
+            setUserHaikus(data);
+            return;
+         }
+
+         const savedHaikus = userData.savedHaikus || [];
+         const updatedHaikus = data.map((haiku) => ({
+            ...haiku,
+            isSaved: savedHaikus.includes(haiku._id),
+         }));
+
+         setUserHaikus(updatedHaikus);
       } catch (err) {
-         console.error("Error fetching haikus by user:", err);
-         setError("Failed to load haikus for the user. Please try again.");
+         console.error("Error al cargar haikus del usuario:", err);
+         setError("No se pudieron cargar los haikus del usuario.");
       } finally {
          setLoading(false);
       }

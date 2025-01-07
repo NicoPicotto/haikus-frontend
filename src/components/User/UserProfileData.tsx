@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { User } from "@/types/user";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -51,8 +50,6 @@ const UserProfileData = ({
                   )}
                </div>
             )}
-
-            <Button variant='outline'>Seguir</Button>
          </div>
       </div>
    );

@@ -75,19 +75,20 @@ export default function Sidebar() {
                               key={user._id}
                               className='flex items-center justify-between'
                            >
+                              <Button
+                                 variant='link'
+                                 className='text-foreground'
+                              >
+                                 <span>
+                                    {user.firstName} {user.lastName}
+                                 </span>
+                              </Button>
+
                               <Link to={`/user/${user._id}`}>
-                                 <Button
-                                    variant='link'
-                                    className='text-foreground'
-                                 >
-                                    <span>
-                                       {user.firstName} {user.lastName}
-                                    </span>
+                                 <Button variant='outline' size='sm'>
+                                    Ver perfil
                                  </Button>
                               </Link>
-                              <Button variant='outline' size='sm'>
-                                 Seguir
-                              </Button>
                            </li>
                         ))}
                   </ul>

@@ -34,7 +34,6 @@ const UserView = () => {
       }
    }, [id]);
 
-   //if (haikusLoading || userLoading) return <p>Loading...</p>;
    if (haikusError || userError)
       return <p>Error: {haikusError || userError}</p>;
 
