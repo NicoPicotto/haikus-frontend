@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "../ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/useUser";
@@ -8,20 +10,58 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function ProfileForm() {
    const { user, loading, error, handleUpdateUser } = useUser();
    const { toast } = useToast();
-   const [firstName, setFirstName] = useState(user?.firstName || "");
-   const [lastName, setLastName] = useState(user?.lastName || "");
-   const [email, setEmail] = useState(user?.email || "");
 
-   //if (loading) return <p>Cargando información...</p>;
-   if (error) return <p>Error al cargar los datos: {error}</p>;
+   const [formData, setFormData] = useState({
+      firstName: "",
+      lastName: "",
+      email: "",
+      bio: "",
+      city: "",
+      socialLinks: {
+         twitter: "",
+         facebook: "",
+         instagram: "",
+      },
+   });
+
+   // Sincronizar formData cuando user cambie
+   useEffect(() => {
+      if (user) {
+         setFormData({
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+            email: user.email || "",
+            bio: user.bio || "",
+            city: user.city || "",
+            socialLinks: {
+               twitter: user.socialLinks?.twitter || "",
+               facebook: user.socialLinks?.facebook || "",
+               instagram: user.socialLinks?.instagram || "",
+            },
+         });
+      }
+   }, [user]);
+
+   const handleChange = (field: string, value: string, isNested = false) => {
+      if (isNested) {
+         setFormData((prev) => ({
+            ...prev,
+            socialLinks: {
+               ...prev.socialLinks,
+               [field]: value,
+            },
+         }));
+      } else {
+         setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+         }));
+      }
+   };
 
    const handleSaveChanges = async () => {
       try {
-         await handleUpdateUser({
-            firstName: firstName || user?.firstName,
-            lastName: lastName || user?.lastName,
-            email: email || user?.email,
-         });
+         await handleUpdateUser(formData);
          toast({
             title: "Datos actualizados.",
             variant: "success",
@@ -35,40 +75,110 @@ export default function ProfileForm() {
       }
    };
 
+   if (error) return <p>Error al cargar los datos: {error}</p>;
+
    return (
-      <div className='bg-white dark:bg-gray-800 p-4 mt-2 rounded-lg shadow'>
+      <div className='bg-white dark:bg-gray-800 p-4  rounded-lg shadow'>
          <h2 className='font-semibold mb-4'>Datos personales</h2>
          <div className='relative space-y-4'>
             {loading && (
                <>
-                  <Skeleton className='h-9 w-full' />
-                  <Skeleton className='h-9 w-full' />
-                  <Skeleton className='h-9 w-full' />
+                  <Skeleton className='h-20 w-full' />
+                  <Skeleton className='h-20 w-full' />
+                  <Skeleton className='h-20 w-full' />
+                  <Skeleton className='h-20 w-full' />
+                  <Skeleton className='h-20 w-full' />
+                  <Skeleton className='h-20 w-full' />
+                  <Skeleton className='h-20 w-full' />
                </>
             )}
             {!loading && user && (
-               <>
-                  <Input
-                     placeholder='Escribí tu nombre aquí...'
-                     defaultValue={user?.firstName || ""}
-                     onChange={(e) => setFirstName(e.target.value)}
-                  />
-                  <Input
-                     placeholder='Escribí tu contraseña aquí...'
-                     defaultValue={user?.lastName || ""}
-                     onChange={(e) => setLastName(e.target.value)}
-                  />
-                  <Input
-                     placeholder='Escribí tu email aquí...'
-                     defaultValue={user?.email || ""}
-                     onChange={(e) => setEmail(e.target.value)}
-                  />
-               </>
-            )}
+               <div className='space-y-4'>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Nombre</Label>
+                     <Input
+                        placeholder='Escribí tu nombre aquí...'
+                        value={formData.firstName}
+                        onChange={(e) =>
+                           handleChange("firstName", e.target.value)
+                        }
+                        id='firstName'
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Apellido</Label>
+                     <Input
+                        placeholder='Escribí tu apellido aquí...'
+                        value={formData.lastName}
+                        onChange={(e) =>
+                           handleChange("lastName", e.target.value)
+                        }
+                        id='lastName'
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Email</Label>
 
-            <Button variant='outline' onClick={handleSaveChanges}>
-               Guardar cambios
-            </Button>
+                     <Input
+                        placeholder='Escribí tu email aquí...'
+                        value={formData.email}
+                        onChange={(e) => handleChange("email", e.target.value)}
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Bio</Label>
+
+                     <Textarea
+                        placeholder='Escribí tu biografía aquí...'
+                        value={formData.bio}
+                        onChange={(e) => handleChange("bio", e.target.value)}
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Ciudad</Label>
+
+                     <Input
+                        placeholder='Escribí tu ciudad aquí...'
+                        value={formData.city}
+                        onChange={(e) => handleChange("city", e.target.value)}
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Twitter</Label>
+
+                     <Input
+                        placeholder='Twitter'
+                        value={formData.socialLinks.twitter}
+                        onChange={(e) =>
+                           handleChange("twitter", e.target.value, true)
+                        }
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Facebook</Label>
+
+                     <Input
+                        placeholder='Facebook'
+                        value={formData.socialLinks.facebook}
+                        onChange={(e) =>
+                           handleChange("facebook", e.target.value, true)
+                        }
+                     />
+                  </div>
+                  <div className='space-y-1'>
+                     <Label className='text-xs'>Instagram</Label>
+
+                     <Input
+                        placeholder='Instagram'
+                        value={formData.socialLinks.instagram}
+                        onChange={(e) =>
+                           handleChange("instagram", e.target.value, true)
+                        }
+                     />
+                  </div>
+               </div>
+            )}
+            <Button onClick={handleSaveChanges}>Guardar cambios</Button>
          </div>
       </div>
    );

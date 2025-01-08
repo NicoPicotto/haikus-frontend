@@ -1,5 +1,10 @@
 import { User } from "@/types/user";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, PenLine } from "lucide-react";
+import { TwitterOutline } from "@styled-icons/evaicons-outline/TwitterOutline";
+import { FacebookOutline } from "@styled-icons/evaicons-outline/FacebookOutline";
+import { Instagram } from "@styled-icons/remix-line/Instagram";
 
 const UserProfileData = ({
    user,
@@ -27,27 +32,52 @@ const UserProfileData = ({
 
    return (
       <div className='bg-white dark:bg-gray-800 p-4 mt-2 rounded-lg shadow'>
-         <h2 className='font-semibold mb-4'>Datos del Haijin</h2>
+         <h2 className='font-semibold mb-4 underline decoration-primary'>
+            Datos del Haijin
+         </h2>
          <div className='relative space-y-4 '>
             {loading && (
-               <div className='space-y-1'>
+               <div className='space-y-2'>
+                  <Skeleton className='h-6 w-full' />
                   <Skeleton className='h-6 w-full' />
                   <Skeleton className='h-6 w-full' />
                   <Skeleton className='h-6 w-full' />
                </div>
             )}
             {!loading && user && (
-               <div className='space-y-1'>
-                  <p className='font-regular'>
+               <div className='space-y-2'>
+                  <p className='font-semibold'>
                      {user?.firstName || ""} {user?.lastName || ""}
                   </p>
 
-                  <p className='text-gray-400'>{user?.email || ""}</p>
-                  {user?.createdAt && (
-                     <p className='text-gray-400'>
-                        {formatMembershipDuration(user.createdAt)}
-                     </p>
-                  )}
+                  <div className='flex items-center text-sm'>
+                     <MapPin className='h-3.5 w-3.5 mr-1 text-primary' />
+                     <p className=''>{user?.city || ""}</p>
+                  </div>
+                  <div className='flex items-center text-sm'>
+                     <PenLine className='h-3.5 w-3.5 mr-1 text-primary' />
+                     <p className=''>{user?.bio || ""}</p>
+                  </div>
+                  <div className='flex items-center text-sm'>
+                     <TwitterOutline className='h-3.5 w-3.5 mr-1 text-primary' />
+                     <p className=''>{user?.socialLinks?.twitter || ""}</p>
+                  </div>
+                  <div className='flex items-center text-sm'>
+                     <FacebookOutline className='h-3.5 w-3.5 mr-1 text-primary' />
+                     <p className=''>{user?.socialLinks?.facebook || ""}</p>
+                  </div>
+                  <div className='flex items-center text-sm'>
+                     <Instagram className='h-3.5 w-3.5 mr-1 text-primary' />
+                     <p className=''>{user?.socialLinks?.instagram || ""}</p>
+                  </div>
+
+                  <div className='mt-2'>
+                     {user?.createdAt && (
+                        <Badge variant='secondary'>
+                           {formatMembershipDuration(user.createdAt)}
+                        </Badge>
+                     )}
+                  </div>
                </div>
             )}
          </div>
