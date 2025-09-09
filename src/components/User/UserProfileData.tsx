@@ -58,18 +58,42 @@ const UserProfileData = ({
                      <PenLine className='h-3.5 w-3.5 mr-1 text-primary' />
                      <p className=''>{user?.bio || ""}</p>
                   </div>
-                  <div className='flex items-center text-sm'>
-                     <TwitterOutline className='h-3.5 w-3.5 mr-1 text-primary' />
-                     <p className=''>{user?.socialLinks?.twitter || ""}</p>
-                  </div>
-                  <div className='flex items-center text-sm'>
-                     <FacebookOutline className='h-3.5 w-3.5 mr-1 text-primary' />
-                     <p className=''>{user?.socialLinks?.facebook || ""}</p>
-                  </div>
-                  <div className='flex items-center text-sm'>
-                     <Instagram className='h-3.5 w-3.5 mr-1 text-primary' />
-                     <p className=''>{user?.socialLinks?.instagram || ""}</p>
-                  </div>
+                  {user?.socialLinks?.twitter !== "" && (
+                     <div className='flex items-center text-sm'>
+                        <TwitterOutline className='h-3.5 w-3.5 mr-1 text-primary' />
+                        <a
+                           target='_blank'
+                           href={user?.socialLinks?.twitter}
+                           className=''
+                        >
+                           {user?.socialLinks?.twitter || ""}
+                        </a>
+                     </div>
+                  )}
+                  {user?.socialLinks?.facebook !== "" && (
+                     <div className='flex items-center text-sm'>
+                        <FacebookOutline className='h-3.5 w-3.5 mr-1 text-primary' />
+                        <a
+                           target='_blank'
+                           href={user?.socialLinks?.facebook}
+                           className=''
+                        >
+                           {user?.socialLinks?.facebook || ""}
+                        </a>
+                     </div>
+                  )}
+                  {user?.socialLinks?.instagram !== "" && (
+                     <div className='flex items-center text-sm'>
+                        <Instagram className='h-3.5 w-3.5 mr-1 text-primary' />
+                        <a
+                           href={user?.socialLinks?.instagram}
+                           target='_blank'
+                           className=''
+                        >
+                           {user?.socialLinks?.instagram || ""}
+                        </a>
+                     </div>
+                  )}
 
                   <div className='mt-2'>
                      {user?.createdAt && (

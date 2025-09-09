@@ -43,7 +43,7 @@ export default function ProfileForm() {
    }, [user]);
 
    const handleChange = (field: string, value: string, isNested = false) => {
-      if (isNested) {
+      if (isNested && field in formData.socialLinks) {
          setFormData((prev) => ({
             ...prev,
             socialLinks: {
@@ -59,7 +59,30 @@ export default function ProfileForm() {
       }
    };
 
+   const isValidUrl = (url: string): boolean => {
+      try {
+         new URL(url);
+         return true;
+      } catch {
+         return false;
+      }
+   };
+
    const handleSaveChanges = async () => {
+      const socialLinks = formData.socialLinks;
+      const invalidLinks = Object.entries(socialLinks).filter(
+         ([, value]) => value && !isValidUrl(value)
+      );
+
+      if (invalidLinks.length > 0) {
+         toast({
+            title: "Error",
+            description: "Algunos de los enlaces ingresados no son válidos.",
+            variant: "destructive",
+         });
+         return;
+      }
+
       try {
          await handleUpdateUser(formData);
          toast({
